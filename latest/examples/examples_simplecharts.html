@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Simple Charts · VegaLite.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>VegaLite.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../index.html">Home</a></li><li><span class="toctext">Getting Started</span><ul><li><a class="toctext" href="../gettingstarted/quick.html">Quick Tour</a></li></ul></li><li><span class="toctext">Examples</span><ul><li class="current"><a class="toctext" href="examples_simplecharts.html">Simple Charts</a><ul class="internal"><li><a class="toctext" href="#Simple-Bar-Chart-1">Simple Bar Chart</a></li><li><a class="toctext" href="#Simple-Heatmap-1">Simple Heatmap</a></li><li><a class="toctext" href="#Simple-Histogram-1">Simple Histogram</a></li><li><a class="toctext" href="#Simple-Line-Chart-1">Simple Line Chart</a></li><li><a class="toctext" href="#Simple-Scatter-Plot-1">Simple Scatter Plot</a></li><li><a class="toctext" href="#Simple-Stacked-Area-Chart-1">Simple Stacked Area Chart</a></li><li><a class="toctext" href="#Strip-Plot-1">Strip Plot</a></li></ul></li></ul></li><li><span class="toctext">User Guide</span><ul><li><a class="toctext" href="../userguide/vlspec.html">Vega-lite specifications</a></li></ul></li><li><span class="toctext">Reference Manual</span><ul><li><a class="toctext" href="../referencemanual/global.html">Global settings</a></li><li><a class="toctext" href="../referencemanual/output.html">Outputs</a></li><li><a class="toctext" href="../referencemanual/functions.html">API reference</a></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li>Examples</li><li><a href="examples_simplecharts.html">Simple Charts</a></li></ul><a class="edit-page" href="https://github.com/fredo-dedup/VegaLite.jl/blob/master/docs/src/examples/examples_simplecharts.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Simple Charts</span><a class="fa fa-bars" href="#"></a></div></header><h2><a class="nav-anchor" id="Simple-Bar-Chart-1" href="#Simple-Bar-Chart-1">Simple Bar Chart</a></h2><pre><code class="language-">using VegaLite, DataFrames
+
+data = DataFrame(
+    a=[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;,&quot;F&quot;,&quot;G&quot;,&quot;H&quot;,&quot;I&quot;],
+    b=[28,55,43,91,81,53,19,87,52]
+)
+
+data |&gt; @vlplot(:bar, x=:a, y=:b)</code></pre><h2><a class="nav-anchor" id="Simple-Heatmap-1" href="#Simple-Heatmap-1">Simple Heatmap</a></h2><pre><code class="language-">using VegaLite, DataFrames
+
+x = [j for i in -5:4, j in -5:4]
+y = [i for i in -5:4, j in -5:4]
+z = x.^2 .+ y.^2
+data = DataFrame(x=vec(x&#39;),y=vec(y&#39;),z=vec(z&#39;))
+
+data |&gt; @vlplot(:rect, x=&quot;x:o&quot;, y=&quot;y:o&quot;, color=:z)</code></pre><h2><a class="nav-anchor" id="Simple-Histogram-1" href="#Simple-Histogram-1">Simple Histogram</a></h2><pre><code class="language-">using VegaLite, VegaDatasets
+
+dataset(&quot;movies&quot;) |&gt;
+@vlplot(:bar, x={:IMDB_Rating, bin=true}, y=&quot;count()&quot;)</code></pre><h2><a class="nav-anchor" id="Simple-Line-Chart-1" href="#Simple-Line-Chart-1">Simple Line Chart</a></h2><pre><code class="language-">using VegaLite, DataFrames
+
+x = 0:100
+data = DataFrame(x=x,sin=sin.(x./5))
+
+data |&gt; @vlplot(:line, x=:x, y={:sin, title=&quot;sin(x)&quot;})</code></pre><h2><a class="nav-anchor" id="Simple-Scatter-Plot-1" href="#Simple-Scatter-Plot-1">Simple Scatter Plot</a></h2><pre><code class="language-">using VegaLite, VegaDatasets
+
+dataset(&quot;iris&quot;) |&gt;
+@vlplot(:point, x=:petalWidth, y=:petalLength, color=:species)</code></pre><p>TODO Add interactivity</p><h2><a class="nav-anchor" id="Simple-Stacked-Area-Chart-1" href="#Simple-Stacked-Area-Chart-1">Simple Stacked Area Chart</a></h2><pre><code class="language-">using VegaLite, VegaDatasets
+
+dataset(&quot;unemployment-across-industries&quot;) |&gt;
+@vlplot(:area, x=&quot;date:t&quot;, y=:count, color=:series)</code></pre><h2><a class="nav-anchor" id="Strip-Plot-1" href="#Strip-Plot-1">Strip Plot</a></h2><pre><code class="language-">using VegaLite, VegaDatasets
+
+dataset(&quot;cars&quot;) |&gt;
+@vlplot(:tick, x=:Horsepower, y=&quot;Cylinders:o&quot;)</code></pre><footer><hr/><a class="previous" href="../gettingstarted/quick.html"><span class="direction">Previous</span><span class="title">Quick Tour</span></a><a class="next" href="../userguide/vlspec.html"><span class="direction">Next</span><span class="title">Vega-lite specifications</span></a></footer></article></body></html>
