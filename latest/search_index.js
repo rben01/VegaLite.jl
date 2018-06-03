@@ -345,9 +345,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/examples_line_charts.html#Simple-Bar-Chart-1",
+    "location": "examples/examples_line_charts.html#Line-Chart-1",
     "page": "Line Charts",
-    "title": "Simple Bar Chart",
+    "title": "Line Chart",
     "category": "section",
     "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :line,\n    transform=[\n        {filter=\"datum.symbol==\'GOOG\'\"}\n    ],\n    x={\"date:t\", axis={format=\"%Y\"}},\n    y=:price\n)"
 },
@@ -484,6 +484,150 @@ var documenterSearchIndex = {"docs": [
     "location": "examples/examples_area_Charts_streamgraphs.html#Horizon-Graph-1",
     "page": "Area Charts & Streamgraphs",
     "title": "Horizon Graph",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_table_based_plots.html#",
+    "page": "Table-based Plots",
+    "title": "Table-based Plots",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_table_based_plots.html#Table-Heatmap-1",
+    "page": "Table-based Plots",
+    "title": "Table Heatmap",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(:rect, y=:Origin, x=\"Cylinders:o\", color=\"mean(Horsepower)\")"
+},
+
+{
+    "location": "examples/examples_table_based_plots.html#Table-Binned-heatmap-1",
+    "page": "Table-based Plots",
+    "title": "Table Binned heatmap",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"movies\") |>\n@vlplot(\n    :rect,\n    width=300, height=200,\n    x={:IMDB_Rating, bin={maxbins=60}},\n    y={:Rotten_Tomatoes_Rating, bin={maxbins=40}},\n    color=\"count()\",\n    config={\n        range={\n            heatmap={\n                scheme=\"greenblue\"\n            }\n        },\n        view={\n            stroke=\"transparent\"\n        }\n    }\n)"
+},
+
+{
+    "location": "examples/examples_table_based_plots.html#Table-Bubble-Plot-(Github-Punch-Card)-1",
+    "page": "Table-based Plots",
+    "title": "Table Bubble Plot (Github Punch Card)",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"github\") |>\n@vlplot(\n    :circle,\n    y=\"day(time):o\",\n    x=\"hours(time):o\",\n    size=\"sum(count)\"\n)"
+},
+
+{
+    "location": "examples/examples_table_based_plots.html#Layering-text-over-heatmap-1",
+    "page": "Table-based Plots",
+    "title": "Layering text over heatmap",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ncars = dataset(\"cars\")\n\n@vlplot(\n    data=cars,\n    y=\"Origin:o\",\n    x=\"Cylinders:o\",\n    config={\n        scale={bandPaddingInner=0, bandPaddingOuter=0},\n        text={baseline=:middle}\n    }\n) +\n@vlplot(:rect, color=\"count()\") +\n@vlplot(\n    :text,\n    text=\"count()\",\n    color={\n        condition={\n            test=\"datum[\'count_*\'] > 100\",\n            value=:black\n        },\n        value=:white\n    }\n)"
+},
+
+{
+    "location": "examples/examples_faceting.html#",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Faceting (Trellis Plot / Small Multiples)",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_faceting.html#Trellis-Bar-Chart-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Trellis Bar Chart",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year==2000\"},\n        {calculate=\"datum.sex==2 ? \'Female\' : \'Male\'\",as=:gender}\n    ],\n    row=\"gender:n\",\n    y={\"sum(people)\", axis={title=\"population\"}},\n    x={\"age:o\", scale={rangeStep=17}},\n    color={\"gender:n\", scale={range=[\"#EA98D2\", \"#659CCA\"]}}\n)"
+},
+
+{
+    "location": "examples/examples_faceting.html#Trellis-Stacked-Bar-Chart-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Trellis Stacked Bar Chart",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(:bar, column=\"year:o\", x=\"sum(yield)\", y=:variety, color=:site)"
+},
+
+{
+    "location": "examples/examples_faceting.html#Trellis-Scatter-Plot-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Trellis Scatter Plot",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"movies\") |>\n@vlplot(:point, column=\"MPAA_Rating:o\", x=:Worldwide_Gross, y=:US_DVD_Sales)"
+},
+
+{
+    "location": "examples/examples_faceting.html#Trellis-Histograms-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Trellis Histograms",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(\n    :bar,\n    x={\n        :Horsepower,\n        bin={maxbins=15}\n    },\n    y=\"count()\",\n    row=:Origin\n)"
+},
+
+{
+    "location": "examples/examples_faceting.html#Trellis-Scatter-Plot-showing-Anscombe\'s-Quartet-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Trellis Scatter Plot showing Anscombe\'s Quartet",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"anscombe\") |>\n@vlplot(\n    :circle,\n    column=:Series,\n    x={:X, scale={zero=false}},\n    y={:Y, scale={zero=false}},\n    opacity={value=1}\n)"
+},
+
+{
+    "location": "examples/examples_faceting.html#Becker\'s-Barley-Trellis-Plot-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Becker\'s Barley Trellis Plot",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(\n    :point,\n    row=\"site:o\",\n    x={\"median(yield)\", scale={zero=false}},\n    y={\n        \"variety:o\",\n        sort={\n            \"yield\",\n            op=:median,\n            order=:descending\n        },\n        scale={rangeStep=12}},\n    color=:year\n)"
+},
+
+{
+    "location": "examples/examples_faceting.html#Trellis-Area-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Trellis Area",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :area,\n    width=300,height=40,\n    transform=[{filter=\"datum.symbol !== \'GOOG\'\"}],\n    x={\n        \"date:t\",\n        axis={format=\"%Y\",title=\"Time\",grid=false}\n    },\n    y={\n        :price,\n        axis={title=\"Price\",grid=false}\n    },\n    color={\n        :symbol,\n        legend=nothing\n    },\n    row={\n        :symbol,\n        header={title=\"Symbol\"}\n    }\n)"
+},
+
+{
+    "location": "examples/examples_repeat_concatenation.html#",
+    "page": "Repeat & Concatenation",
+    "title": "Repeat & Concatenation",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_repeat_concatenation.html#Repeat-and-layer-to-show-different-weather-measures-1",
+    "page": "Repeat & Concatenation",
+    "title": "Repeat and layer to show different weather measures",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"weather.csv\") |>\n@vlplot(repeat={column=[:temp_max,:precipitation,:wind]}) +\n(\n    @vlplot() +\n    @vlplot(\n        :line,\n        y={field={repeat=:column},aggregate=:mean,typ=:quantitative},\n        x=\"month(date):o\",\n        detail=\"year(date):t\",\n        color=:location,\n        opacity={value=0.2}\n    ) +\n    @vlplot(\n        :line,\n        y={field={repeat=:column},aggregate=:mean,typ=:quantitative},\n        x=\"month(date):o\",\n        color=:location\n    )\n)"
+},
+
+{
+    "location": "examples/examples_repeat_concatenation.html#Vertically-concatenated-charts-that-show-precipitation-in-Seattle-1",
+    "page": "Repeat & Concatenation",
+    "title": "Vertically concatenated charts that show precipitation in Seattle",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"weather.csv\") |>\n@vlplot(transform=[{filter=\"datum.location === \'Seattle\'\"}]) +\n[\n    @vlplot(:bar,x=\"month(date):o\",y=\"mean(precipitation)\");\n    @vlplot(:point,x={:temp_min, bin=true}, y={:temp_max, bin=true}, size=\"count()\")\n]"
+},
+
+{
+    "location": "examples/examples_repeat_concatenation.html#Horizontally-repeated-charts-1",
+    "page": "Repeat & Concatenation",
+    "title": "Horizontally repeated charts",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(repeat={column=[:Horsepower, :Miles_per_Gallon, :Acceleration]}) +\n@vlplot(:bar,x={field={repeat=:column},bin=true,typ=:quantitative}, y=\"count()\", color=:Origin)"
+},
+
+{
+    "location": "examples/examples_repeat_concatenation.html#Interactive-Scatterplot-Matrix-1",
+    "page": "Repeat & Concatenation",
+    "title": "Interactive Scatterplot Matrix",
     "category": "section",
     "text": "TODO"
 },
