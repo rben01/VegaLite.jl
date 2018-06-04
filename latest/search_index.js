@@ -5,7 +5,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Home",
     "category": "page",
-    "text": "VegaLite.jl enables the generation of Vega-Lite plots from Julia.Vega-Lite is a visualization grammar describing mappings from data to graphical properties (e.g. marks, axes, scales). For rendering it uses pre-defined design rules that keep the visualization specification succinct while still leaving user control.Vega-Lite supports:data transformation, sorting, filtering and grouping.\naggregation, binning, and simple statistical analysis (e.g. mean, std, var, count).\nplots can be faceted, layered and stacked vertically or horizontally."
+    "text": ""
+},
+
+{
+    "location": "index.html#VegaLite.jl-1",
+    "page": "Home",
+    "title": "VegaLite.jl",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "index.html#Overview-1",
+    "page": "Home",
+    "title": "Overview",
+    "category": "section",
+    "text": "VegaLite.jl is a plotting package for the julia programming language. The package is based on Vega-Lite, which extends a traditional grammar of graphics API into a grammar of interactive graphics.VegaLite.jl allows you to create a wide range of statistical plots. It exposes the full functionality of the underlying Vega-Lite and is a the same time tightly integrated into the julia ecosystem. Here is an example of a scatter plot:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon,\n    color=:Origin,\n    width=400,\n    height=400\n)"
 },
 
 {
@@ -13,15 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Installation",
     "category": "section",
-    "text": "To install the package run Pkg.add(\"VegaLite\")."
-},
-
-{
-    "location": "index.html#Principles-1",
-    "page": "Home",
-    "title": "Principles",
-    "category": "section",
-    "text": "The package is essentially a thin layer translating Julia statements to the Vega-Lite visualization specification format.One can take any Vega-Lite specification and easily translate it into corresponding julia code. In addition, the package provides various ways to specify figures in a much more concise way. Here is an example of a scatter plot with a legend:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(\n  :point,\n  x=:Horsepower,\n  y=:Miles_per_Gallon,\n  color=:Origin,\n  width=400,\n  height=400\n)"
+    "text": "To install VegaLite.jl, run the following julia code:Pkg.add(\"VegaLite\")"
 },
 
 {
@@ -37,7 +45,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Quick Tour",
     "title": "Quick tour",
     "category": "section",
-    "text": ""
+    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
 },
 
 {
@@ -73,10 +81,82 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "userguide/vlspec.html#",
+    "page": "Vega-lite specifications",
+    "title": "Vega-lite specifications",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "userguide/vlspec.html#Vega-lite-specifications-1",
+    "page": "Vega-lite specifications",
+    "title": "Vega-lite specifications",
+    "category": "section",
+    "text": "A Vega-Lite plot specification is represented as a VLSpec object in julia. There are multiple ways to create a VLSpec object:The @vlplot macro is the main way to create VLSpec instances in code.\nUsing the vl string macro, you can write Vega-Lite specifications as JSON in your julia code.\nYou can load Vega-Lite specifications from disc with the load function.\nThe DataVoyager.jl package provides a graphical user interface that you can use to create Vega-Lite specification.There are two main things one can do with a VLSpec object:One can display it in various front ends.\nOne can save the plot to disc in various formats using the save function.This section will give a brief overview of these options. Other sections will describe each option in more detail."
+},
+
+{
+    "location": "userguide/vlspec.html#The-@vlplot-macro-1",
+    "page": "Vega-lite specifications",
+    "title": "The @vlplot macro",
+    "category": "section",
+    "text": "The @vlplot macro is the main way to specify plots in VegaLite.jl. The macro uses a syntax that is closely aligned with the JSON format of the original Vega-Lite specification. It is very simple to take a vega-lite specification and \"translate\" it into a corresponding @vlplot macro call. In addition, the macro provides a number of convenient syntax features that allow for a concise expression of common vega-lite patterns. These shorthands give VegaLite.jl a syntax that can be used in a productive way for exploratory data analysis.A very simple Vega-Lite JSON specification looks like this:{\n  \"data\": {\n    \"values\": [\n      {\"a\": \"A\",\"b\": 28}, {\"a\": \"B\",\"b\": 55}, {\"a\": \"C\",\"b\": 43},\n      {\"a\": \"D\",\"b\": 91}, {\"a\": \"E\",\"b\": 81}, {\"a\": \"F\",\"b\": 53},\n      {\"a\": \"G\",\"b\": 19}, {\"a\": \"H\",\"b\": 87}, {\"a\": \"I\",\"b\": 52}\n    ]\n  },\n  \"mark\": \"bar\",\n  \"encoding\": {\n    \"x\": {\"field\": \"a\", \"type\": \"ordinal\"},\n    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n  }\n}This can be directly translated into the following @vlplot macro call:using VegaLite\n\n@vlplot(\n    data={\n        values=[\n            {a=\"A\",b=28},{a=\"B\",b=55},{a=\"C\",b=43},\n            {a=\"D\",b=91},{a=\"E\",b=81},{a=\"F\",b=53},\n            {a=\"G\",b=19},{a=\"H\",b=87},{a=\"I\",b=52}\n        ]\n    },\n    mark=\"bar\",\n    encoding={\n        x={field=\"a\", typ=\"ordinal\"},\n        y={field=\"b\", typ=\"quantitative\"}\n    }\n)The main difference between JSON and the @vlplot macro is that keys are not surrounded by quotation marks in the macro, and key-value pairs are separate by a = (instead of a :). The second important change is that whenever a key is named type in the JSON version, one has to translate that into typ in the macro (type is a reserved keyword in julia and therefore can\'t be used in this context).While these literal translations of JSON work, they are also quite verbose. The @vlplot macro provides a number of shorthands so that the same plot can be expressed in a much more conside manner. The following example creates the same plot, but uses a number of alternative syntaxes provided by the @vlplot macro:using VegaLite, DataFrames\n\ndata = DataFrame(\n    a=[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\",\"H\",\"I\"],\n    b=[28,55,43,91,81,53,19,87,52]\n)\n\ndata |> @vlplot(:bar, x=:a, y=:b)Typically you should use these shorthands so that you can express your plots in a concise way. The various shorthands are described in more detail in a different chapter."
+},
+
+{
+    "location": "userguide/vlspec.html#The-vl-string-macro-1",
+    "page": "Vega-lite specifications",
+    "title": "The vl string macro",
+    "category": "section",
+    "text": "One can embed a JSON vega-lite specification directly in julia code by using the vl string macro:using VegaLite\n\nspec = vl\"\"\"\n{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v2.json\",\n  \"description\": \"A simple bar chart with embedded data.\",\n  \"data\": {\n    \"values\": [\n      {\"a\": \"A\",\"b\": 28}, {\"a\": \"B\",\"b\": 55}, {\"a\": \"C\",\"b\": 43},\n      {\"a\": \"D\",\"b\": 91}, {\"a\": \"E\",\"b\": 81}, {\"a\": \"F\",\"b\": 53},\n      {\"a\": \"G\",\"b\": 19}, {\"a\": \"H\",\"b\": 87}, {\"a\": \"I\",\"b\": 52}\n    ]\n  },\n  \"mark\": \"bar\",\n  \"encoding\": {\n    \"x\": {\"field\": \"a\", \"type\": \"ordinal\"},\n    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n  }\n}\n\"\"\"The resulting VLSpec object is indistinguishable from one that is created via the @vlplot macro.The main benefit of this approach is that one can directly leverage JSON vega-lite examples and code."
+},
+
+{
+    "location": "userguide/vlspec.html#Loading-and-saving-vega-lite-specifications-1",
+    "page": "Vega-lite specifications",
+    "title": "Loading and saving vega-lite specifications",
+    "category": "section",
+    "text": "The load and save functions can be used to load and save vega-lite specifications to and from disc. The following example loads a vega-lite specification from a file named myfigure.vegalite:using VegaLite\n\nspec = load(\"myfigure.vegalite\")To save a VLSpec to a file on disc, use the save function:using VegaLite\n\nspec = ... # Aquire a spec from somewhere\n\nsavespec(\"myfigure.vegalite\", spec)note: Note\nUsing the load and save function will be enabled in a future release. For now you should use loadspec and savespec instead (both of these functions will be deprecated once load and save are enabled)."
+},
+
+{
+    "location": "userguide/vlspec.html#[DataVoyager.jl](https://github.com/davidanthoff/DataVoyager.jl)-1",
+    "page": "Vega-lite specifications",
+    "title": "DataVoyager.jl",
+    "category": "section",
+    "text": "The DataVoyager.jl package provides a graphical UI for data exploration that is based on vega-lite. One can use that tool to create a figure in the UI, and then export the corresponding vega-lite specification for use with this package here."
+},
+
+{
+    "location": "userguide/vlspec.html#Displaying-plots-1",
+    "page": "Vega-lite specifications",
+    "title": "Displaying plots",
+    "category": "section",
+    "text": "VegaLite.jl integrates into the default julia multimedia system for viewing plots. This means that in order to show a plot p you would simply call the display(p) function. Most interactive julia environments (REPL, IJulia, Jupyter Lab, nteract etc.) automatically call display on the value of the last interactive command for you.Simply viewing plots should work out of the box in all known julia environments. If you plan to use the interactive features of VegaLite.jl the story becomes slightly more nuanced: while many environments (REPL, Jupyter Lab, nteract, ElectronDisplay.jl) support interactive VegaLite.jl plots by default, there are others that either need some extra configuration work (Jupyter Notebook), or don\'t support interactive plots."
+},
+
+{
+    "location": "userguide/vlspec.html#Saving-plots-1",
+    "page": "Vega-lite specifications",
+    "title": "Saving plots",
+    "category": "section",
+    "text": "VegaLite.jl plots can be saved as PNG, SVG, PDF and EPS files. You can save a plot by calling the save function:using VegaLite, VegaDatasets\n\np = dataset(\"cars\") |> @vlplot(:point, x=:Horsepower, y=:Miles_per_Gallon)\n\n# Save as PNG file\nsave(\"figure.png\", p)\n\n# Save as SVG file\nsave(\"figure.svg\", p)\n\n# Save as PDF file\nsave(\"figure.pdf\", p)\n\n# Save EPS PNG file\nsave(\"figure.eps\", p)You can also use the |> operator with the save function:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n    @vlplot(:point, x=:Horsepower, y=:Miles_per_Gallon) |>\n    save(\"figure.png\")"
+},
+
+{
     "location": "examples/examples_simplecharts.html#",
     "page": "Simple Charts",
     "title": "Simple Charts",
     "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_simplecharts.html#Simple-Charts-1",
+    "page": "Simple Charts",
+    "title": "Simple Charts",
+    "category": "section",
     "text": ""
 },
 
@@ -141,6 +221,14 @@ var documenterSearchIndex = {"docs": [
     "page": "Bar Charts & Histograms",
     "title": "Bar Charts & Histograms",
     "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_barchartshistograms.html#Bar-Charts-and-Histograms-1",
+    "page": "Bar Charts & Histograms",
+    "title": "Bar Charts & Histograms",
+    "category": "section",
     "text": ""
 },
 
@@ -249,6 +337,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/examples_scatter_strip_plots.html#Scatter-and-Strip-Plots-1",
+    "page": "Scatter & Strip Plots",
+    "title": "Scatter & Strip Plots",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "examples/examples_scatter_strip_plots.html#Scatterplot-1",
     "page": "Scatter & Strip Plots",
     "title": "Scatterplot",
@@ -341,6 +437,14 @@ var documenterSearchIndex = {"docs": [
     "page": "Line Charts",
     "title": "Line Charts",
     "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_line_charts.html#Line-Charts-1",
+    "page": "Line Charts",
+    "title": "Line Charts",
+    "category": "section",
     "text": ""
 },
 
@@ -441,6 +545,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/examples_area_Charts_streamgraphs.html#Area-Charts-and-Streamgraphs-1",
+    "page": "Area Charts & Streamgraphs",
+    "title": "Area Charts & Streamgraphs",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "examples/examples_area_Charts_streamgraphs.html#Area-Chart-1",
     "page": "Area Charts & Streamgraphs",
     "title": "Area Chart",
@@ -497,6 +609,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/examples_table_based_plots.html#Table-based-Plots-1",
+    "page": "Table-based Plots",
+    "title": "Table-based Plots",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "examples/examples_table_based_plots.html#Table-Heatmap-1",
     "page": "Table-based Plots",
     "title": "Table Heatmap",
@@ -529,10 +649,98 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/examples_error_bars_bands.html#",
+    "page": "Error Bars & Error Bands",
+    "title": "Error Bars & Error Bands",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_error_bars_bands.html#Error-Bars-and-Error-Bands-1",
+    "page": "Error Bars & Error Bands",
+    "title": "Error Bars & Error Bands",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_error_bars_bands.html#Error-Bars-showing-Confidence-Interval-1",
+    "page": "Error Bars & Error Bands",
+    "title": "Error Bars showing Confidence Interval",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot() +\n@vlplot(\n    mark={\n        :point,\n        filled=true\n    },\n    x={\n        \"mean(yield)\",\n        scale={zero=false},\n        axis={title=\"Barley Yield\"}\n    },\n    y={\n        \"variety:o\",\n        color={value=:black}\n    }\n) +\n@vlplot(:rule, x=\"ci0(yield)\", x2=\"ci1(yield)\", y=\"variety:o\")"
+},
+
+{
+    "location": "examples/examples_error_bars_bands.html#Error-Bars-showing-Standard-Deviation-1",
+    "page": "Error Bars & Error Bands",
+    "title": "Error Bars showing Standard Deviation",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(\n    transform=[\n        {\n            aggregate=[\n                {op=:mean, field=:yield, as=:mean},\n                {op=:stdev, field=:yield, as=:stdev}\n            ],\n            groupby=[:variety]\n        },\n        {calculate=\"datum.mean-datum.stdev\", as=:lower},\n        {calculate=\"datum.mean+datum.stdev\", as=:upper}\n    ]\n) +\n@vlplot(\n    mark={\n        :point,\n        filled=true\n    },\n    x={\n        \"mean:q\",\n        scale={zero=false},\n        axis={title=\"Barley Yield\"}\n    },\n    y=\"variety:o\",\n    color={value=:black}\n) +\n@vlplot(:rule, x=\"upper:q\", x2=\"lower:q\", y=\"variety:o\")"
+},
+
+{
+    "location": "examples/examples_error_bars_bands.html#Line-Chart-with-Confidence-Interval-Band-1",
+    "page": "Error Bars & Error Bands",
+    "title": "Line Chart with Confidence Interval Band",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :area,\n    x=\"year(Year):t\",\n    y={\n        \"ci0(Miles_per_Gallon)\",\n        axis={title=\"Mean of Miles per Gallon (95% CIs)\"}\n    },\n    y2=\"ci1(Miles_per_Gallon)\",\n    opacity={value=0.3}\n) +\n@vlplot(\n    :line,\n    x=\"year(Year)\",\n    y=\"mean(Miles_per_Gallon)\"\n)"
+},
+
+{
+    "location": "examples/examples_error_bars_bands.html#Scatterplot-with-Mean-and-Standard-Deviation-Overlay-1",
+    "page": "Error Bars & Error Bands",
+    "title": "Scatterplot with Mean and Standard Deviation Overlay",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon\n) +\n(\n    @vlplot(\n        transform=[\n            {aggregate=[\n                {op=:mean, field=:Miles_per_Gallon, as=:mean_MPG},\n                {op=:stdev, field=:Miles_per_Gallon, as=:dev_MPG}\n                ],\n                groupby=[]\n            },\n            {calculate=\"datum.mean_MPG - datum.dev_MPG\", as=:lower},\n            {calculate=\"datum.mean_MPG + datum.dev_MPG\", as=:upper}\n        ]) +\n    @vlplot(:rule,y={\"mean_MPG:q\",axis=nothing}) +\n    @vlplot(\n        :rect,\n        y={\"lower:q\",axis=nothing},\n        y2=\"upper:q\",\n        opacity={value=0.2}\n    )\n)"
+},
+
+{
+    "location": "examples/examples_box_plots.html#",
+    "page": "Box Plots",
+    "title": "Box Plots",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_box_plots.html#Box-Plots-1",
+    "page": "Box Plots",
+    "title": "Box Plots",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_box_plots.html#Box-Plot-with-Min/Max-Whiskers-1",
+    "page": "Box Plots",
+    "title": "Box Plot with Min/Max Whiskers",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    transform=[{\n        aggregate=[\n            {op=:q1, field=:people, as=:lowerBox},\n            {op=:q3, field=:people, as=:upperBox},\n            {op=:median, field=:people, as=:midBox},\n            {op=:min, field=:people, as=:lowerWhisker},\n            {op=:max, field=:people, as=:upperWhisker}\n        ],\n        groupby=[:age]\n    }]\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y={\"lowerWhisker:q\", axis={title=\"population\"}},\n    y2=\"lowerBox:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y=\"upperBox:q\",\n    y2=\"upperWhisker:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:bar, style=:box},\n    y=\"lowerBox:q\",\n    y2=\"upperBox:q\",\n    x=\"age:o\",\n    size={value=5}\n) +\n@vlplot(\n    mark={:tick, style=:boxMid},\n    y=\"midBox:q\",\n    x=\"age:o\",\n    color={value=:white},\n    size={value=5}\n)"
+},
+
+{
+    "location": "examples/examples_box_plots.html#Tukey-Box-Plot-(1.5-IQR)-1",
+    "page": "Box Plots",
+    "title": "Tukey Box Plot (1.5 IQR)",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    transform=[\n        {\n            aggregate=[\n                {op=:q1, field=:people, as=:lowerBox},\n                {op=:q3, field=:people, as=:upperBox},\n                {op=:median, field=:people, as=:midBox}\n            ],\n            groupby=[:age]\n        },\n        {\n            calculate=\"datum.upperBox - datum.lowerBox\",\n            as=:IQR\n        },\n        {\n            calculate=\"datum.lowerBox - datum.IQR * 1.5\",\n            as=:lowerWhisker\n        },\n        {\n            calculate=\"datum.upperBox + datum.IQR * 1.5\",\n            as=:upperWhisker\n        }\n    ]\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y={\"lowerWhisker:q\", axis={title=\"population\"}},\n    y2=\"lowerBox:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y=\"upperBox:q\",\n    y2=\"upperWhisker:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:bar, style=:box},\n    y=\"lowerBox:q\",\n    y2=\"upperBox:q\",\n    x=\"age:o\",\n    size={value=5}\n) +\n@vlplot(\n    mark={:tick, style=:boxMid},\n    y=\"midBox:q\",\n    x=\"age:o\",\n    color={value=:white},\n    size={value=5}\n)"
+},
+
+{
     "location": "examples/examples_faceting.html#",
     "page": "Faceting (Trellis Plot / Small Multiples)",
     "title": "Faceting (Trellis Plot / Small Multiples)",
     "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_faceting.html#Faceting-(Trellis-Plot-/-Small-Multiples)-1",
+    "page": "Faceting (Trellis Plot / Small Multiples)",
+    "title": "Faceting (Trellis Plot / Small Multiples)",
+    "category": "section",
     "text": ""
 },
 
@@ -601,6 +809,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/examples_repeat_concatenation.html#Repeat-and-Concatenation-1",
+    "page": "Repeat & Concatenation",
+    "title": "Repeat & Concatenation",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "examples/examples_repeat_concatenation.html#Repeat-and-layer-to-show-different-weather-measures-1",
     "page": "Repeat & Concatenation",
     "title": "Repeat and layer to show different weather measures",
@@ -633,51 +849,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "userguide/vlspec.html#",
-    "page": "Vega-lite specifications",
-    "title": "Vega-lite specifications",
-    "category": "page",
-    "text": ""
-},
-
-{
-    "location": "userguide/vlspec.html#Vega-lite-specifications-1",
-    "page": "Vega-lite specifications",
-    "title": "Vega-lite specifications",
-    "category": "section",
-    "text": "A vega-lite specification is represented as a VLSpec object in julia. There are multiple ways to create a VLSpec object. The previous section demonstrated the use of the julia API to create these specification objects. This section describes three additional ways to create and interact with these specification objects: the vl string macro, functions that load and save specifications from and to disc, and the DataVoyager.jl package."
-},
-
-{
-    "location": "userguide/vlspec.html#The-vl-string-macro-1",
-    "page": "Vega-lite specifications",
-    "title": "The vl string macro",
-    "category": "section",
-    "text": "One can embed a JSON vega-lite specification directly in julia code by using the vl string macro:using VegaLite\n\nspec = vl\"\"\"\n{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v2.json\",\n  \"description\": \"A simple bar chart with embedded data.\",\n  \"data\": {\n    \"values\": [\n      {\"a\": \"A\",\"b\": 28}, {\"a\": \"B\",\"b\": 55}, {\"a\": \"C\",\"b\": 43},\n      {\"a\": \"D\",\"b\": 91}, {\"a\": \"E\",\"b\": 81}, {\"a\": \"F\",\"b\": 53},\n      {\"a\": \"G\",\"b\": 19}, {\"a\": \"H\",\"b\": 87}, {\"a\": \"I\",\"b\": 52}\n    ]\n  },\n  \"mark\": \"bar\",\n  \"encoding\": {\n    \"x\": {\"field\": \"a\", \"type\": \"ordinal\"},\n    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n  }\n}\n\"\"\"The resulting VLSpec object is indistinguishable from one that is created via the julia API.The main benefit of this approach is that one can directly leverage JSON vega-lite examples and code."
-},
-
-{
-    "location": "userguide/vlspec.html#Loading-and-saving-vega-lite-specifications-1",
-    "page": "Vega-lite specifications",
-    "title": "Loading and saving vega-lite specifications",
-    "category": "section",
-    "text": "The loadspec and savespec function can be used to load and save vega-lite specifications from disc. The following example loads a vega-lite specification from a file named myfigure.vegalite:using VegaLite\n\nspec = loadspec(\"myfigure.vegalite\")To save a VLSpec to a file on disc, use the savespec function:using VegaLite\n\nspec = ... # Aquire a spec from somewhere\n\nsavespec(\"myfigure.vegalite\", spec)"
-},
-
-{
-    "location": "userguide/vlspec.html#[DataVoyager.jl](https://github.com/davidanthoff/DataVoyager.jl)-1",
-    "page": "Vega-lite specifications",
-    "title": "DataVoyager.jl",
-    "category": "section",
-    "text": "The DataVoyager.jl package provides a graphical UI for data exploration that is based on vega-lite. One can use that tool to create a figure in the UI, and then export the corresponding vega-lite specification for use with this package here."
-},
-
-{
     "location": "referencemanual/global.html#",
     "page": "Global settings",
     "title": "Global settings",
     "category": "page",
-    "text": ""
+    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
 },
 
 {
@@ -709,7 +885,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Outputs",
     "title": "Outputs",
     "category": "page",
-    "text": ""
+    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
 },
 
 {
@@ -773,7 +949,7 @@ var documenterSearchIndex = {"docs": [
     "page": "API reference",
     "title": "API reference",
     "category": "page",
-    "text": ""
+    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
 },
 
 {
