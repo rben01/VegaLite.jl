@@ -533,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Line Charts",
     "title": "Line Charts Showing Ranks Over Time",
     "category": "section",
-    "text": "using VegaLite, DataFrames\n\ndata = DataFrame(\n    team=[\"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\", \"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\", \"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\"],\n    matchday=[1,1,1,1,2,2,2,2,3,3,3,3],\n    point=[3,1,1,0,6,1,0,3,9,1,0,6]\n)\n\ndata |>\n@vlplot(\n    transform=[{\n        sort=[{field=\"point\", order=\"descending\"}],\n        window=[{\n            op=\"rank\",\n            as=\"rank\"\n        }],\n        groupby=[\"matchday\"]\n    }],\n    mark={\n        :line,\n        orient=\"vertical\"\n    },\n    x=\"matchday:o\",\n    y=\"rank:o\",\n    color={\n        :team,\n        scale={\n            domain=[\"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\"],\n            range=[\"#cc2613\", \"#125dc7\", \"#8bcdfc\", \"#d1d1d1\"]\n        }\n    }\n)"
+    "text": "using VegaLite, DataFrames\n\ndata = DataFrame(\n    team=[\"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\", \"Man Utd\", \"Chelsea\",\n        \"Man City\", \"Spurs\", \"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\"],\n    matchday=[1,1,1,1,2,2,2,2,3,3,3,3],\n    point=[3,1,1,0,6,1,0,3,9,1,0,6]\n)\n\ndata |>\n@vlplot(\n    transform=[{\n        sort=[{field=\"point\", order=\"descending\"}],\n        window=[{\n            op=\"rank\",\n            as=\"rank\"\n        }],\n        groupby=[\"matchday\"]\n    }],\n    mark={\n        :line,\n        orient=\"vertical\"\n    },\n    x=\"matchday:o\",\n    y=\"rank:o\",\n    color={\n        :team,\n        scale={\n            domain=[\"Man Utd\", \"Chelsea\", \"Man City\", \"Spurs\"],\n            range=[\"#cc2613\", \"#125dc7\", \"#8bcdfc\", \"#d1d1d1\"]\n        }\n    }\n)"
 },
 
 {
@@ -837,7 +837,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Repeat & Concatenation",
     "title": "Horizontally repeated charts",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(repeat={column=[:Horsepower, :Miles_per_Gallon, :Acceleration]}) +\n@vlplot(:bar,x={field={repeat=:column},bin=true,typ=:quantitative}, y=\"count()\", color=:Origin)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(repeat={column=[:Horsepower, :Miles_per_Gallon, :Acceleration]}) +\n@vlplot(\n    :bar,\n    x={field={repeat=:column},bin=true,typ=:quantitative},\n    y=\"count()\",\n    color=:Origin\n)"
 },
 
 {
