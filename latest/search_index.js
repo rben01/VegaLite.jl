@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Vega-lite specifications",
     "title": "The @vlplot macro",
     "category": "section",
-    "text": "The @vlplot macro is the main way to specify plots in VegaLite.jl. The macro uses a syntax that is closely aligned with the JSON format of the original Vega-Lite specification. It is very simple to take a vega-lite specification and \"translate\" it into a corresponding @vlplot macro call. In addition, the macro provides a number of convenient syntax features that allow for a concise expression of common vega-lite patterns. These shorthands give VegaLite.jl a syntax that can be used in a productive way for exploratory data analysis.A very simple Vega-Lite JSON specification looks like this:{\n  \"data\": {\n    \"values\": [\n      {\"a\": \"A\",\"b\": 28}, {\"a\": \"B\",\"b\": 55}, {\"a\": \"C\",\"b\": 43},\n      {\"a\": \"D\",\"b\": 91}, {\"a\": \"E\",\"b\": 81}, {\"a\": \"F\",\"b\": 53},\n      {\"a\": \"G\",\"b\": 19}, {\"a\": \"H\",\"b\": 87}, {\"a\": \"I\",\"b\": 52}\n    ]\n  },\n  \"mark\": \"bar\",\n  \"encoding\": {\n    \"x\": {\"field\": \"a\", \"type\": \"ordinal\"},\n    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n  }\n}This can be directly translated into the following @vlplot macro call:using VegaLite\n\n@vlplot(\n    data={\n        values=[\n            {a=\"A\",b=28},{a=\"B\",b=55},{a=\"C\",b=43},\n            {a=\"D\",b=91},{a=\"E\",b=81},{a=\"F\",b=53},\n            {a=\"G\",b=19},{a=\"H\",b=87},{a=\"I\",b=52}\n        ]\n    },\n    mark=\"bar\",\n    encoding={\n        x={field=\"a\", typ=\"ordinal\"},\n        y={field=\"b\", typ=\"quantitative\"}\n    }\n)The main difference between JSON and the @vlplot macro is that keys are not surrounded by quotation marks in the macro, and key-value pairs are separate by a = (instead of a :). The second important change is that whenever a key is named type in the JSON version, one has to translate that into typ in the macro (type is a reserved keyword in julia and therefore can\'t be used in this context).While these literal translations of JSON work, they are also quite verbose. The @vlplot macro provides a number of shorthands so that the same plot can be expressed in a much more conside manner. The following example creates the same plot, but uses a number of alternative syntaxes provided by the @vlplot macro:using VegaLite, DataFrames\n\ndata = DataFrame(\n    a=[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\",\"H\",\"I\"],\n    b=[28,55,43,91,81,53,19,87,52]\n)\n\ndata |> @vlplot(:bar, x=:a, y=:b)Typically you should use these shorthands so that you can express your plots in a concise way. The various shorthands are described in more detail in a different chapter."
+    "text": "The @vlplot macro is the main way to specify plots in VegaLite.jl. The macro uses a syntax that is closely aligned with the JSON format of the original Vega-Lite specification. It is very simple to take a vega-lite specification and \"translate\" it into a corresponding @vlplot macro call. In addition, the macro provides a number of convenient syntax features that allow for a concise expression of common vega-lite patterns. These shorthand give VegaLite.jl a syntax that can be used in a productive way for exploratory data analysis.A very simple Vega-Lite JSON specification looks like this:{\n  \"data\": {\n    \"values\": [\n      {\"a\": \"A\",\"b\": 28}, {\"a\": \"B\",\"b\": 55}, {\"a\": \"C\",\"b\": 43},\n      {\"a\": \"D\",\"b\": 91}, {\"a\": \"E\",\"b\": 81}, {\"a\": \"F\",\"b\": 53},\n      {\"a\": \"G\",\"b\": 19}, {\"a\": \"H\",\"b\": 87}, {\"a\": \"I\",\"b\": 52}\n    ]\n  },\n  \"mark\": \"bar\",\n  \"encoding\": {\n    \"x\": {\"field\": \"a\", \"type\": \"ordinal\"},\n    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n  }\n}This can be directly translated into the following @vlplot macro call:using VegaLite\n\n@vlplot(\n    data={\n        values=[\n            {a=\"A\",b=28},{a=\"B\",b=55},{a=\"C\",b=43},\n            {a=\"D\",b=91},{a=\"E\",b=81},{a=\"F\",b=53},\n            {a=\"G\",b=19},{a=\"H\",b=87},{a=\"I\",b=52}\n        ]\n    },\n    mark=\"bar\",\n    encoding={\n        x={field=\"a\", typ=\"ordinal\"},\n        y={field=\"b\", typ=\"quantitative\"}\n    }\n)The main difference between JSON and the @vlplot macro is that keys are not surrounded by quotation marks in the macro, and key-value pairs are separate by a = (instead of a :). The second important change is that whenever a key is named type in the JSON version, one has to translate that into typ in the macro (type is a reserved keyword in julia and therefore can\'t be used in this context).While these literal translations of JSON work, they are also quite verbose. The @vlplot macro provides a number of shorthands so that the same plot can be expressed in a much more concise manner. The following example creates the same plot, but uses a number of alternative syntaxes provided by the @vlplot macro:using VegaLite, DataFrames\n\ndata = DataFrame(\n    a=[\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\",\"H\",\"I\"],\n    b=[28,55,43,91,81,53,19,87,52]\n)\n\ndata |> @vlplot(:bar, x=:a, y=:b)Typically you should use these shorthands so that you can express your plots in a concise way. The various shorthands are described in more detail in a different chapter."
 },
 
 {
@@ -142,6 +142,62 @@ var documenterSearchIndex = {"docs": [
     "title": "Saving plots",
     "category": "section",
     "text": "VegaLite.jl plots can be saved as PNG, SVG, PDF and EPS files. You can save a plot by calling the save function:using VegaLite, VegaDatasets\n\np = dataset(\"cars\") |> @vlplot(:point, x=:Horsepower, y=:Miles_per_Gallon)\n\n# Save as PNG file\nsave(\"figure.png\", p)\n\n# Save as SVG file\nsave(\"figure.svg\", p)\n\n# Save as PDF file\nsave(\"figure.pdf\", p)\n\n# Save EPS PNG file\nsave(\"figure.eps\", p)You can also use the |> operator with the save function:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n    @vlplot(:point, x=:Horsepower, y=:Miles_per_Gallon) |>\n    save(\"figure.png\")"
+},
+
+{
+    "location": "userguide/vlplotmacro.html#",
+    "page": "The @vlplot command",
+    "title": "The @vlplot command",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "userguide/vlplotmacro.html#The-@vlplot-command-1",
+    "page": "The @vlplot command",
+    "title": "The @vlplot command",
+    "category": "section",
+    "text": "The @vlplot macro is the main method to create Vega-Lite plots from julia. The macro accepts arguments that look almost identical to the original Vega-Lite JSON syntax. It should therefore be very easy to take any given Vega-Lite JSON example and translate it into a corresponding @vlplot macro call. The macro also provides a number of shorthands that make it easy to create very compact plot specifications. This section will first review the difference between the original JSON Vega-Lite syntax and the @vlplot macro, and then discuss the various shorthands that users will typically use."
+},
+
+{
+    "location": "userguide/vlplotmacro.html#JSON-syntax-vs-@vlplot-macro-1",
+    "page": "The @vlplot command",
+    "title": "JSON syntax vs @vlplot macro",
+    "category": "section",
+    "text": "A very simple Vega-Lite JSON specification looks like this:{\n  \"data\": {\n    \"values\": [\n      {\"a\": \"A\",\"b\": 28}, {\"a\": \"B\",\"b\": 55}, {\"a\": \"C\",\"b\": 43},\n      {\"a\": \"D\",\"b\": 91}, {\"a\": \"E\",\"b\": 81}, {\"a\": \"F\",\"b\": 53},\n      {\"a\": \"G\",\"b\": 19}, {\"a\": \"H\",\"b\": 87}, {\"a\": \"I\",\"b\": 52}\n    ]\n  },\n  \"mark\": \"bar\",\n  \"encoding\": {\n    \"x\": {\"field\": \"a\", \"type\": \"ordinal\"},\n    \"y\": {\"field\": \"b\", \"type\": \"quantitative\"}\n  }\n}This can be directly translated into the following @vlplot macro call:using VegaLite\n\n@vlplot(\n    data={\n        values=[\n            {a=\"A\",b=28},{a=\"B\",b=55},{a=\"C\",b=43},\n            {a=\"D\",b=91},{a=\"E\",b=81},{a=\"F\",b=53},\n            {a=\"G\",b=19},{a=\"H\",b=87},{a=\"I\",b=52}\n        ]\n    },\n    mark=\"bar\",\n    encoding={\n        x={field=\"a\", typ=\"ordinal\"},\n        y={field=\"b\", typ=\"quantitative\"}\n    }\n)We had to make the following adjustments to the original JSON specification:The outer pair of {} brackets was removed, the parenthesis () of the macro call instead deliminate the beginning and end of the specification.\nThe quotation marks \" around keys like mark are removed.\nThe JSON key-value separator : was replaced with =.\nAny key that is named type in the JSON specification has to be renamed to typ in the @vlplot macro (type is a reserved keyword in julia and can therefore not be used here).\nAny null value in the JSON specification should be replaced with nothing in the @vlplot call.These five rules should be sufficient to translate any valid JSON Vega-Lite specification into a corresponding @vlplot macro call."
+},
+
+{
+    "location": "userguide/vlplotmacro.html#Symbols-instead-of-Strings-1",
+    "page": "The @vlplot command",
+    "title": "Symbols instead of Strings",
+    "category": "section",
+    "text": "A first shorthand provided by the @vlplot macro is that you can use a Symbol on the right hand side of any key-value pair instead of a String. For example, instead of writing mark=\"bar\", you can write mark=:bar.The following example demonstrates this in the context of a full plotting example:data |>\n@vlplot(\n    mark=:point, # Note how we use :point instead of \"point\" here\n    encoding={\n        x={\n            field=:a, # Note how we use :a instead of \"a\" here\n            typ=:ordinal # Note how we use :ordinal instead of \"ordinal\" here\n        },\n        y={\n            field=:b, # Note how we use :b instead of \"b\" here\n            typ=:quantitative # Note how we use :quantitative instead of \"quantitative\" here\n        }\n    }\n)"
+},
+
+{
+    "location": "userguide/vlplotmacro.html#Shorthand-string-syntax-for-encodings-1",
+    "page": "The @vlplot command",
+    "title": "Shorthand string syntax for encodings",
+    "category": "section",
+    "text": "VegaLite.jl provides a similar string shorthand syntax for encodings as Altair (the Python wrapper around Vega-Lite).Almost any channel encoding in a specification will have the keys field and typ, as in x={field=:a, typ=:ordinal}. Because these patterns are so common, we provide a shorthand string syntax for this case. Using the shorthand one can write the channel encoding as x={\"a:o\"}. These string shorthands have to appear as the first positional argument inside the curly brackets {} for the encoding channel. The pattern inside the string is that one specifies the name of the field before the :, and then the first letter of the type of encoding (o for ordinal, q for quantitative etc.).The string shorthand also extends to the timeUnit and aggregate key in encodings. Aggregation functions and time units can be specified using a function call syntax inside the string shorthand. For example, x={\"mean(foo)\"} is equivalent to x={field=:foo, aggregate=:mean, typ=:quantitative} (note that we don\'t have to specify the type explicitly when we use aggregations, the default assumption is that the result of an aggregation is quantitative). An example that uses the shorthand for a time unit is x={\"year(foo):t\"}, which is equivalent to x={field=:foo, timeUnit=:year, typ=:quantitative}. For aggregations that don\'t require a field name (e.g. the count aggregation), you can just write x=\"count()\".String shorthands can be combined with any other attributes. For example, the following example shows how one can specify an axis title and still use the string shorthand notation:x={\"foo:q\", axis={title=\"some title\"}}In cases where you don\'t want to specify any other attributes than what can be expressed in the string shorthand you don\'t have to use the surrounding curly brackets {} for the encoding: x=\"foo:q\" is equivalent to x={field=:foo, typ=:quantitative}. If you only want to specify the field and not even the type, you can resort to using a Symbol: x=:foo is also a valid encoding.The shorthand string syntax allows us to write the specification of the plot from the previous section in this much more concise format:data |>\n@vlplot(\n    mark=:point,\n    encoding={\n        x=\"a:o\",\n        y=:b\n    }\n)"
+},
+
+{
+    "location": "userguide/vlplotmacro.html#Shorthands-for-the-encoding-element-1",
+    "page": "The @vlplot command",
+    "title": "Shorthands for the encoding element",
+    "category": "section",
+    "text": "There are two shorthands for the encoding element in a plot specification.The first is to simply write enc instead of encoding. For example, the previous specification can be written asdata |>\n@vlplot(\n    mark=:point,\n    enc={\n        x=\"a:o\",\n        y=:b\n    }\n)An even shorter notation is to just leave the level of the encoding element away and place the channel encodings directly into the top level specification. With that option you would write the previous example as:data |>\n@vlplot(mark=:point, x=\"a:o\", y=:b)"
+},
+
+{
+    "location": "userguide/vlplotmacro.html#Mark-shorthands-1",
+    "page": "The @vlplot command",
+    "title": "Mark shorthands",
+    "category": "section",
+    "text": "There are two shorthands for the mark attribute in a specification. The first option is to use the first positional argument in a @vlplot call to specify the mark type. This only works if you don\'t want to specify any other mark attributes. For example, the previous plot can now be written asdata |> @vlplot(:point, x=\"a:o\", y=:b)If you want to specify more mark attributes, you can reintroduce curly brackets {}, and then specify the type of the mark as the first positional argument inside the mark block. For example, the following code specifies that the mark color should be red, in addition to picking points as the mark type:data |>\n@vlplot(\n    mark={:point, color=:red},\n    x=\"a:o\",\n    y=:b\n)"
 },
 
 {
