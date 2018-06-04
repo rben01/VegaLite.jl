@@ -849,6 +849,86 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/examples_maps.html#",
+    "page": "Maps (Geographic Displays)",
+    "title": "Maps (Geographic Displays)",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "examples/examples_maps.html#Choropleth-of-unemployment-rate-per-county-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "Choropleth of unemployment rate per county",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_maps.html#One-dot-per-zipcode-in-the-U.S.-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "One dot per zipcode in the U.S.",
+    "category": "section",
+    "text": "TODO convert this to PNG outputusing VegaLite, VegaDatasets\n\ndataset(\"zipcodes\").path |>\n@vlplot(\n    :circle,\n    width=500, height=300,\n    transform=[{calculate=\"substring(datum.zip_code, 0, 1)\", as=:digit}],\n    projection={typ=:albersUsa},\n    longitude=\"longitude:q\",\n    latitude=\"latitude:q\",\n    size={value=1},\n    color=\"digit:n\"\n)"
+},
+
+{
+    "location": "examples/examples_maps.html#One-dot-per-airport-in-the-US-overlayed-on-geoshape-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "One dot per airport in the US overlayed on geoshape",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_maps.html#Rules-(line-segments)-connecting-SEA-to-every-airport-reachable-via-direct-flight-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "Rules (line segments) connecting SEA to every airport reachable via direct flight",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_maps.html#Three-choropleths-representing-disjoint-data-from-the-same-table-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "Three choropleths representing disjoint data from the same table",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_maps.html#U.S.-state-capitals-overlayed-on-a-map-of-the-U.S-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "U.S. state capitals overlayed on a map of the U.S",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\nus10m = dataset(\"us-10m\").path\nusstatecapitals = dataset(\"us-state-capitals\").path\n\np = @vlplot(width=800, height=500, projection={typ=:albersUsa}) +\n@vlplot(\n    data={\n        url=us10m,\n        format={\n            typ=:topojson,\n            feature=:states\n        }\n    },\n    mark={\n        :geoshape,\n        fill=:lightgray,\n        stroke=:white\n    }\n) +\n(\n    @vlplot(\n        data={url=usstatecapitals},\n        enc={\n            longitude=\"lon:q\",\n            latitude=\"lat:q\"\n        }\n    ) +\n    @vlplot(mark={:circle, color=:orange}) +\n    @vlplot(mark={:text, dy=-6}, text=\"city:n\")\n)"
+},
+
+{
+    "location": "examples/examples_maps.html#Line-drawn-between-airports-in-the-U.S.-simulating-a-flight-itinerary-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "Line drawn between airports in the U.S. simulating a flight itinerary",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_maps.html#Income-in-the-U.S.-by-state,-faceted-over-income-brackets-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "Income in the U.S. by state, faceted over income brackets",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
+    "location": "examples/examples_maps.html#London-Tube-Lines-1",
+    "page": "Maps (Geographic Displays)",
+    "title": "London Tube Lines",
+    "category": "section",
+    "text": "TODO"
+},
+
+{
     "location": "referencemanual/global.html#",
     "page": "Global settings",
     "title": "Global settings",
