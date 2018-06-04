@@ -869,7 +869,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Maps (Geographic Displays)",
     "title": "One dot per zipcode in the U.S.",
     "category": "section",
-    "text": "TODO convert this to PNG outputusing VegaLite, VegaDatasets\n\ndataset(\"zipcodes\").path |>\n@vlplot(\n    :circle,\n    width=500, height=300,\n    transform=[{calculate=\"substring(datum.zip_code, 0, 1)\", as=:digit}],\n    projection={typ=:albersUsa},\n    longitude=\"longitude:q\",\n    latitude=\"latitude:q\",\n    size={value=1},\n    color=\"digit:n\"\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"zipcodes\").path |>\n@vlplot(\n    :circle,\n    width=500, height=300,\n    transform=[{calculate=\"substring(datum.zip_code, 0, 1)\", as=:digit}],\n    projection={typ=:albersUsa},\n    longitude=\"longitude:q\",\n    latitude=\"latitude:q\",\n    size={value=1},\n    color=\"digit:n\"\n)\n\nVegaLite.MimeWrapper{MIME\"image/png\"}(dataset(\"zipcodes\").path |> @vlplot(:circle,width=500,height=300,transform=[{calculate=\"substring(datum.zip_code, 0, 1)\", as=:digit}],projection={typ=:albersUsa},longitude=\"longitude:q\",latitude=\"latitude:q\",size={value=1},color=\"digit:n\")) # hide"
 },
 
 {
