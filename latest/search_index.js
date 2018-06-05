@@ -981,7 +981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Maps (Geographic Displays)",
     "title": "Choropleth of unemployment rate per county",
     "category": "section",
-    "text": "TODO"
+    "text": "using VegaLite, VegaDatasets\n\nus10m = dataset(\"us-10m\").path\nunemployment = dataset(\"unemployment.tsv\").path\n\n@vlplot(\n    :geoshape,\n    width=500, height=300,\n    data={\n        url=us10m,\n        format={\n            typ=:topojson,\n            feature=:counties\n        }\n    },\n    transform=[{\n        lookup=:id,\n        from={\n            data=unemployment,\n            key=:id,\n            fields=[\"rate\"]\n        }\n    }],\n    projection={\n        typ=:albersUsa\n    },\n    color=\"rate:q\"\n)"
 },
 
 {
@@ -997,7 +997,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Maps (Geographic Displays)",
     "title": "One dot per airport in the US overlayed on geoshape",
     "category": "section",
-    "text": "TODO"
+    "text": "using VegaLite, VegaDatasets\n\nus10m = dataset(\"us-10m\").path\nairports = dataset(\"airports\")\n\n@vlplot(width=500, height=300) +\n@vlplot(\n    mark={\n        :geoshape,\n        fill=:lightgray,\n        stroke=:white\n    },\n    data={\n        url=us10m,\n        format={typ=:topojson, feature=:states}\n    },\n    projection={typ=:albersUsa},\n) +\n@vlplot(\n    :circle,\n    data=airports,\n    projection={typ=:albersUsa},\n    longitude=\"longitude:q\",\n    latitude=\"latitude:q\",\n    size={value=10},\n    color={value=:steelblue}\n)"
 },
 
 {
