@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Quick Tour · VegaLite.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>VegaLite.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search.html"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../index.html">Home</a></li><li><span class="toctext">Getting Started</span><ul><li class="current"><a class="toctext" href="quick.html">Quick Tour</a><ul class="internal"></ul></li></ul></li><li><span class="toctext">User Guide</span><ul><li><a class="toctext" href="../userguide/vlspec.html">Vega-lite specifications</a></li><li><a class="toctext" href="../userguide/vlplotmacro.html">The @vlplot command</a></li><li><a class="toctext" href="../userguide/data.html">Data sources</a></li></ul></li><li><span class="toctext">Examples</span><ul><li><a class="toctext" href="../examples/examples_simplecharts.html">Simple Charts</a></li><li><span class="toctext">Single-View Plots</span><ul><li><a class="toctext" href="../examples/examples_barchartshistograms.html">Bar Charts &amp; Histograms</a></li><li><a class="toctext" href="../examples/examples_scatter_strip_plots.html">Scatter &amp; Strip Plots</a></li><li><a class="toctext" href="../examples/examples_line_charts.html">Line Charts</a></li><li><a class="toctext" href="../examples/examples_area_Charts_streamgraphs.html">Area Charts &amp; Streamgraphs</a></li><li><a class="toctext" href="../examples/examples_table_based_plots.html">Table-based Plots</a></li></ul></li><li><span class="toctext">Layered Plots</span><ul><li><a class="toctext" href="../examples/examples_error_bars_bands.html">Error Bars &amp; Error Bands</a></li><li><a class="toctext" href="../examples/examples_box_plots.html">Box Plots</a></li></ul></li><li><span class="toctext">Multi-View Displays</span><ul><li><a class="toctext" href="../examples/examples_faceting.html">Faceting (Trellis Plot / Small Multiples)</a></li><li><a class="toctext" href="../examples/examples_repeat_concatenation.html">Repeat &amp; Concatenation</a></li></ul></li><li><a class="toctext" href="../examples/examples_maps.html">Maps (Geographic Displays)</a></li></ul></li><li><span class="toctext">Reference Manual</span><ul><li><a class="toctext" href="../referencemanual/global.html">Global settings</a></li><li><a class="toctext" href="../referencemanual/output.html">Outputs</a></li><li><a class="toctext" href="../referencemanual/functions.html">API reference</a></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li>Getting Started</li><li><a href="quick.html">Quick Tour</a></li></ul><a class="edit-page" href="https://github.com/fredo-dedup/VegaLite.jl/blob/master/docs/src/gettingstarted/quick.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Quick Tour</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Quick-tour-1" href="#Quick-tour-1">Quick tour</a></h1><div class="admonition note"><div class="admonition-title">Note</div><div class="admonition-text"><p>This section is outdated and does not reflect the latest API of the package.</p></div></div><h3><a class="nav-anchor" id="Simple-scatter-plot-1" href="#Simple-scatter-plot-1">Simple scatter plot</a></h3><p>Use functions linked by the <code>|&gt;</code> operator to build your visuialization incrementally. VegaLite.jl can use DataFrames or DataTables as sources for data. For a scatter plot, specify that the mark should a point by <code>markpoint()</code>, then how the data in the DataFrame <code>mpg</code> (fields <code>:Cty</code>, <code>:Hwy</code> and <code>:Manufacturer</code>) should be connected to the encoding channels (x, y and color respectively). Finally, global configuration options are provided in a <code>config</code> function (type <code>? config</code>`to see all the options).</p><pre><code class="language-julia">using RDatasets
+
+mpg = dataset(&quot;ggplot2&quot;, &quot;mpg&quot;) # load the &#39;mpg&#39; dataframe
+
+mpg |&gt; # start with the data source (here a DataFrame)
+  markpoint() |&gt;
+  encoding(xquantitative(field=:Cty, axis=nothing),
+           yquantitative(field=:Hwy, vlscale(zero=false)),
+           colornominal(field=:Manufacturer)) |&gt;    # bind color to :Manufacturer, nominal scale
+  config(vlcell(width=350, height=400))</code></pre><p><img src="png/vegalite3.png" alt="plot1"/></p><p>An alternative, more julian syntax, without the piping operator is also valid. The preceding statement can just as well be written :</p><pre><code class="language-julia">plot(data(mpg),
+     markpoint(),
+     encoding(xquantitative(field=:Cty, axis=nothing),
+              yquantitative(field=:Hwy, vlscale(zero=false)),
+              colornominal(field=:Manufacturer)),
+     config(vlcell(width=350, height=400)))</code></pre><h3><a class="nav-anchor" id="Stacking-multiple-plots-with-hconcat()-or-vconcat()-1" href="#Stacking-multiple-plots-with-hconcat()-or-vconcat()-1">Stacking multiple plots with <code>hconcat()</code> or <code>vconcat()</code></a></h3><p>Several independant plots can be concatenated vertically or horizontally :</p><pre><code class="language-julia">using RDatasets
+
+mpg = dataset(&quot;ggplot2&quot;, &quot;mpg&quot;) # load the &#39;mpg&#39; dataframe
+
+r1 = markline() |&gt;
+     encoding(xquantitative(field=:Cty, axis=nothing),
+              yquantitative(field=:Hwy, vlscale(zero=false)),
+              colornominal(field=:Manufacturer)) ;
+
+r2 = markrect() |&gt;
+      encoding(xquantitative(field=:Displ, vlbin(maxbins=5)),
+               yquantitative(field=:Hwy, vlbin(maxbins=5)),
+               colornominal(field=:Manufacturer)) ;
+
+mpg |&gt;
+  vconcat(r1) |&gt;
+  vconcat(r2) |&gt;
+  config(vlcell(width=400))</code></pre><p><img src="png/example3.png" alt="plot2"/></p><h3><a class="nav-anchor" id="Using-layer()-to-surimpose-several-plots-1" href="#Using-layer()-to-surimpose-several-plots-1">Using <code>layer()</code> to surimpose several plots</a></h3><p>When several marks need to shown on the same visualization, use the <code>layer()</code> function :</p><pre><code class="language-julia">using DataFrames
+
+df  = DataFrame(x=[0:5;], y=rand(6))
+
+encx = xquantitative(field=:x)
+ency = yquantitative(field=:y)
+
+df |&gt;
+  plot(width=500) |&gt;
+  layer(markline(interpolate=&quot;linear&quot;),
+        encoding(encx, ency, vlcolor(value=&quot;green&quot;))) |&gt;
+  layer(markline(interpolate=&quot;basis&quot;),
+        encoding(encx, ency, vlcolor(value=&quot;red&quot;))) |&gt;
+  layer(markpoint(), encoding(encx, ency, vlcolor(value=&quot;black&quot;)))</code></pre><p><img src="png/example4.png" alt="plot4"/></p><h3><a class="nav-anchor" id="Using-repeat()-to-facet-a-plot-by-data-fields-1" href="#Using-repeat()-to-facet-a-plot-by-data-fields-1">Using <code>repeat()</code> to facet a plot by data fields</a></h3><p>To create a facet plot with encoding channels cycled through a list of data fields use the <code>repeat()</code> function :</p><pre><code class="language-julia">using Distributions, DataTables
+
+xs = rand(Normal(), 100, 3)
+dt = DataTable(a = xs[:,1] + xs[:,2] .^ 2,
+               b = xs[:,3] .* xs[:,2],
+               c = xs[:,3] .+ xs[:,2])
+
+dt |&gt;
+  repeat(column = [:a, :b, :c], row = [:a, :b, :c]) |&gt;
+  config(vlcell(width=100, height=100)) |&gt;
+  spec(markpoint(),
+       encoding(xquantitative(vlfield(repeat=:column)),
+                yquantitative(vlfield(repeat=:row))))</code></pre><p><img src="../examples/png/example2.png" alt="plot3"/></p><footer><hr/><a class="previous" href="../index.html"><span class="direction">Previous</span><span class="title">Home</span></a><a class="next" href="../userguide/vlspec.html"><span class="direction">Next</span><span class="title">Vega-lite specifications</span></a></footer></article></body></html>
