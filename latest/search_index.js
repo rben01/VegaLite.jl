@@ -965,7 +965,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Repeat & Concatenation",
     "title": "Interactive Scatterplot Matrix",
     "category": "section",
-    "text": "TODO"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |> \n@vlplot(\n    repeat={\n        row=[:Horsepower, :Acceleration, :Miles_per_Gallon],\n        column=[:Miles_per_Gallon, :Acceleration, :Horsepower]\n    }\n) +\n@vlplot(\n    :point,\n    selection={\n        brush={\n            typ=:interval,\n            resolve=:union,\n            on=\"[mousedown[event.shiftKey], window:mouseup] > window:mousemove!\",\n            translate=\"[mousedown[event.shiftKey], window:mouseup] > window:mousemove!\",\n            zoom=\"wheel![event.shiftKey]\"\n        },\n        grid={\n            typ=:interval,\n            resolve=:global,\n            bind=:scales,\n            translate=\"[mousedown[!event.shiftKey], window:mouseup] > window:mousemove!\",\n            zoom=\"wheel![!event.shiftKey]\"\n        }\n    },\n    x={field={repeat=:column}, typ=:quantitative},\n    y={field={repeat=:row}, typ=:quantitative},\n    color={\n        condition={\n            selection=:brush,\n            field=:Origin,\n            typ=:nominal\n        },\n        value=:grey\n    }\n)"
 },
 
 {
