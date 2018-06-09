@@ -717,7 +717,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Area Charts & Streamgraphs",
     "title": "Horizon Graph",
     "category": "section",
-    "text": "TODO"
+    "text": "using VegaLite, DataFrames\n\ndata = DataFrame(\n    x=1:20,\n    y=[28,55,43,91,81,53,19,87,52,48,24,49,87,66,17,27,68,16,49,15]\n)\n\ndata |>\n@vlplot(width=300, height=50, config={area={interpolate=:monotone}}) +\n@vlplot(\n    mark={\n        :area,\n        clip=true,\n        orient=:vertical\n    },\n    x={:x, scale={zero=false, nice=false}},\n    y={:y, scale={domain=[0,50]}},\n    opacity={value=0.6}\n) +\n@vlplot(\n    transform=[{calculate=\"datum.y-50\", as=:ny}],\n    mark={\n        :area,\n        clip=true,\n        orient=:vertical\n    },\n    x=:x,\n    y={\n        \"ny:q\",\n        scale={domain=[0,50]},\n        axis={title=\"y\"}\n    },\n    opacity={value=0.3}\n)"
 },
 
 {
