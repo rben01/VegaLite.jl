@@ -533,7 +533,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Scatter & Strip Plots",
     "title": "Bubble Plot (Gapminder)",
     "category": "section",
-    "text": "TODO Add interactive selectionusing VegaLite, VegaDatasets\n\ndataset(\"gapminder-health-income\") |>\n@vlplot(\n    :circle,\n    width=500,height=300,\n    y={:health, scale={zero=false}},\n    x={:income, scale={typ=:log}},\n    size=:population,\n    color={value=\"#000\"}\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"gapminder-health-income\") |>\n@vlplot(\n    :circle,\n    width=500,height=300,\n    selection={\n        view={typ=:interval, bind=:scales}\n    },\n    y={:health, scale={zero=false}},\n    x={:income, scale={typ=:log}},\n    size=:population,\n    color={value=\"#000\"}\n)"
 },
 
 {
