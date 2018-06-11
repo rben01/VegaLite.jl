@@ -25,11 +25,51 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "index.html#Installation-1",
-    "page": "Home",
+    "location": "gettingstarted/installation.html#",
+    "page": "Installation",
+    "title": "Installation",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "gettingstarted/installation.html#Installation-1",
+    "page": "Installation",
     "title": "Installation",
     "category": "section",
     "text": "To install VegaLite.jl, run the following julia code:Pkg.add(\"VegaLite\")"
+},
+
+{
+    "location": "gettingstarted/installation.html#REPL-frontends-1",
+    "page": "Installation",
+    "title": "REPL frontends",
+    "category": "section",
+    "text": "If you create plots from the standard julia REPL, they will show up in a browser window when displayed.As an alternative you can install ElectronDisplay.jl with Pkg.add(\"ElectronDisplay\"). Whenever you load that package with using ElectronDisplay, any plot you display will then show up in an electron based window instead of a browser window."
+},
+
+{
+    "location": "gettingstarted/installation.html#Notebook-frontends-1",
+    "page": "Installation",
+    "title": "Notebook frontends",
+    "category": "section",
+    "text": "VegaLite.jl works with Jupyter Lab, Jupyter Notebook and nteract.The first step to use any of these notebooks frontends is to install them. The second step is to install the general julia integration by running the following julia code:Pkg.add(\"IJulia\")At that point you should be able to use VegaLite.jl in notebooks that have a julia kernel.We recommend that you use either Jupyter Lab or nteract for the best VegaLite.jl experience: you will get the full interactive experience of Vega-Lite in those two frontends without any further installations. While you can display plots in the classic Jupyter Notebook, you won\'t get interactive plots in that environment without further setup steps."
+},
+
+{
+    "location": "gettingstarted/installation.html#VS-Code-and-Juno/Atom-1",
+    "page": "Installation",
+    "title": "VS Code and Juno/Atom",
+    "category": "section",
+    "text": "If you plot from within VS Code with the julia extension or Juno/Atom, plots will show up in a plot pane in those editors.Neither of the plot panes currently support the interactive features of VegaLite.jl. There are plans to add support for interactive charts for both editors."
+},
+
+{
+    "location": "gettingstarted/installation.html#Example-Datasets-1",
+    "page": "Installation",
+    "title": "Example Datasets",
+    "category": "section",
+    "text": "Many of the examples in the documentation use data from the Vega Datasets repository. You can access these datasets easily with the julia package VegaDatasets.jl. To install that package, run the following julia code:Pkg.add(\"VegaDatasets\")"
 },
 
 {
@@ -1045,7 +1085,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Maps (Geographic Displays)",
     "title": "London Tube Lines",
     "category": "section",
-    "text": "TODO"
+    "text": "using VegaLite, VegaDatasets\n\n@vlplot(\n    width=700, height=500,\n    config={\n        view={\n            stroke=:transparent\n        }\n    }\n) +\n@vlplot(\n    data={\n        url=dataset(\"londonBoroughs\").path,\n        format={\n            typ=:topojson,\n            feature=:boroughs\n        }\n    },\n    mark={\n        :geoshape,\n        stroke=:white,\n        strokeWidth=2\n    },\n    color={value=\"#eee\"}\n) +\n@vlplot(\n    data={\n        url=dataset(\"londonCentroids\").path,\n        format={\n            typ=:json\n        }\n    },\n    transform=[{\n        calculate=\"indexof (datum.name,\' \') > 0  ? substring(datum.name,0,indexof(datum.name, \' \')) : datum.name\",\n        as=:bLabel\n    }],\n    mark=:text,\n    longitude=\"cx:q\",\n    latitude=\"cy:q\",\n    text=\"bLabel:n\",\n    size={value=8},\n    opacity={value=0.6}\n) +\n@vlplot(\n    data={\n        url=dataset(\"londonTubeLines\").path,\n        format={\n            typ=:topojson,\n            feature=:line\n        }\n    },\n    mark={\n        :geoshape,\n        filled=false,\n        strokeWidth=2\n    },\n    color={\n        \"id:n\",\n        legend={\n            title=nothing,\n            orient=\"bottom-right\",\n            offset=0\n        },\n        scale={\n            domain=[\n                \"Bakerloo\",\n                \"Central\",\n                \"Circle\",\n                \"District\",\n                \"DLR\",\n                \"Hammersmith & City\",\n                \"Jubilee\",\n                \"Metropolitan\",\n                \"Northern\",\n                \"Piccadilly\",\n                \"Victoria\",\n                \"Waterloo & City\"\n            ],\n            range=[\n                \"rgb(137,78,36)\",\n                \"rgb(220,36,30)\",\n                \"rgb(255,206,0)\",\n                \"rgb(1,114,41)\",\n                \"rgb(0,175,173)\",\n                \"rgb(215,153,175)\",\n                \"rgb(106,114,120)\",\n                \"rgb(114,17,84)\",\n                \"rgb(0,0,0)\",\n                \"rgb(0,24,168)\",\n                \"rgb(0,160,226)\",\n                \"rgb(106,187,170)\"\n            ]\n        }\n    }\n)"
 },
 
 {
