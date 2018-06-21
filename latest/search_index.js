@@ -149,15 +149,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Tutorial",
     "title": "Aggregations",
     "category": "section",
-    "text": "TODO"
+    "text": "The following graph shows many individual data points for each x axis value:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |> @vlplot(:point, x=:Origin, y=:Miles_per_Gallon)In such situations it can often be more interesting to compute an aggregate value for each x axis value, for example the mean miles per gallon number for each region:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |> @vlplot(:point, x=:Origin, y=\"average(Miles_per_Gallon)\")Here we are making use of another shorthand syntax option in VegaLite.jl. We can specify an aggregation operation in the form of a function call (e.g. average(...)) and then pass the name of the column for which we want to compute the aggregation as an argument (e.g. average(Miles_per_Gallon)). Vega-Lite supports many different aggregations. For example the next plot shows the minimum miles per gallon per region:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |> @vlplot(:bar, x=:Origin, y=\"min(Miles_per_Gallon)\")This example also uses a different mark, namely the bar mark to create a bar plot.There is one aggregation operator that works slightly different, namely the count aggregation. It simply counts the number of rows in each group, so one does not have to specify a column to be aggregated:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |> @vlplot(:bar, x=:Origin, y=\"count()\")Aggregations can of course be used for any encoding channel, we can for example easily create a horizontal bar chart:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |> @vlplot(:bar, x=\"count()\", y=:Origin)"
 },
 
 {
-    "location": "gettingstarted/tutorial.html#Configurations-1",
+    "location": "gettingstarted/tutorial.html#Config-1",
     "page": "Tutorial",
-    "title": "Configurations",
+    "title": "Config",
     "category": "section",
-    "text": "TODO"
+    "text": "Almost all aspects of a Vega-Lite plot can be configured and customized. Many of these choices can be set by using the config keyword in the @vlplot macro call. For example, the following plot adds a title to the plot and the configures the title to use a red font:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(\n    :point,\n    x=:Miles_per_Gallon,\n    y=:Acceleration,\n    title=\"Cars\",\n    config={\n        title={\n            color=:red\n        }\n    }\n)The original Vega-Lite documentation describes all config options in great detail."
 },
 
 {
@@ -165,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tutorial",
     "title": "File IO",
     "category": "section",
-    "text": "TODO"
+    "text": "Plots that are created with VegaLite.jl can be saved to disc in a number of formats (PNG, SVG, PDF, ESP). To save a plot, simply call the save function:using VegaLite, VegaDatasets\n\np = dataset(\"cars\") |> @vlplot(:bar, x=\"count()\", y=:Origin)\n\nsave(\"myplot.png\", p)You can also pipe a plot into the save function:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(:bar, x=\"count()\", y=:Origin) |>\nsave(\"myplot.pdf\")"
 },
 
 {
