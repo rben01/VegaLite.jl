@@ -1141,7 +1141,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Global settings",
     "title": "Global settings",
     "category": "page",
-    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
+    "text": ""
 },
 
 {
@@ -1165,7 +1165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Global settings",
     "title": "Global settings",
     "category": "section",
-    "text": "rendereractionlinksjunoplotpane"
+    "text": "rendereractionlinks"
 },
 
 {
@@ -1173,21 +1173,13 @@ var documenterSearchIndex = {"docs": [
     "page": "Outputs",
     "title": "Outputs",
     "category": "page",
-    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
+    "text": ""
 },
 
 {
     "location": "referencemanual/output.html#Output-1",
     "page": "Outputs",
     "title": "Output",
-    "category": "section",
-    "text": ""
-},
-
-{
-    "location": "referencemanual/output.html#On-evaluation-1",
-    "page": "Outputs",
-    "title": "On evaluation",
     "category": "section",
     "text": ""
 },
@@ -1217,67 +1209,11 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "referencemanual/output.html#VegaLite.savefig",
-    "page": "Outputs",
-    "title": "VegaLite.savefig",
-    "category": "function",
-    "text": "savefig(filename::AbstractString, v::VLSpec{:plot})\n\nSave the plot v as a file with name filename. The file format will be picked based on the extension of the filename.\n\n\n\n"
-},
-
-{
     "location": "referencemanual/output.html#Saving-to-a-file-1",
     "page": "Outputs",
     "title": "Saving to a file",
     "category": "section",
-    "text": "pdf\npng\nsvgOr you can use a single saving functions that guesses the image format from the extension of the provided filenamesavefig"
-},
-
-{
-    "location": "referencemanual/functions.html#",
-    "page": "API reference",
-    "title": "API reference",
-    "category": "page",
-    "text": "note: Note\nThis section is outdated and does not reflect the latest API of the package."
-},
-
-{
-    "location": "referencemanual/functions.html#Functions-1",
-    "page": "API reference",
-    "title": "Functions",
-    "category": "section",
-    "text": ""
-},
-
-{
-    "location": "referencemanual/functions.html#st-level-functions-1",
-    "page": "API reference",
-    "title": "1st level functions",
-    "category": "section",
-    "text": "plot\ndata\ntransform\nvlmark\nencoding\nconfig\nlayer\nfacet\nrepeat\nhconcat\nvconcat\nspec\nselection"
-},
-
-{
-    "location": "referencemanual/functions.html#Mark-functions-1",
-    "page": "API reference",
-    "title": "Mark functions",
-    "category": "section",
-    "text": "vltick\nvlbar"
-},
-
-{
-    "location": "referencemanual/functions.html#Encoding-channels-1",
-    "page": "API reference",
-    "title": "Encoding channels",
-    "category": "section",
-    "text": "vlx\nvly\nvlx2\nvly2\nvlcolor\nvlsize\nvlrow\nvlcolumn\nvltooltip\nvlorder\nvldetail\nvlshape\nvlopacity\nvltext"
-},
-
-{
-    "location": "referencemanual/functions.html#nd-level-functions-1",
-    "page": "API reference",
-    "title": "2nd level functions",
-    "category": "section",
-    "text": "vlaxis\nvlscale\nvlsort\nvlformat\nvllegend\nvltitle\nvlvalues\nvlfrom\nvloneOf\nvloverlay\nvlcondition\nvlencode\nvlequal\nvlaxisBand\nvlfilter\nvlscheme\nvlfield\nvlpadding\nvlheader\nvlinterval\nvlbin\nvlbind\nvlsummarize\nvldomain\nvlresolve\nvlcell"
+    "text": "pdf\npng\nsvgIn addition you can also use the save (reexported from VegaLite.jl) function from the FileIO.jl package to save plots"
 },
 
 ]}
