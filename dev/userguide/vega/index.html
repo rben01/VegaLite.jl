@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Using Vega · VegaLite.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>VegaLite.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../">Home</a></li><li><span class="toctext">Getting Started</span><ul><li><a class="toctext" href="../../gettingstarted/installation/">Installation</a></li><li><a class="toctext" href="../../gettingstarted/tutorial/">Tutorial</a></li></ul></li><li><span class="toctext">User Guide</span><ul><li><a class="toctext" href="../vlspec/">Vega-lite specifications</a></li><li><a class="toctext" href="../vlplotmacro/">The @vlplot command</a></li><li><a class="toctext" href="../data/">Data sources</a></li><li class="current"><a class="toctext" href>Using Vega</a><ul class="internal"><li><a class="toctext" href="#The-vg-string-macro-1">The <code>vg</code> string macro</a></li><li><a class="toctext" href="#VGSpec-1">VGSpec</a></li><li><a class="toctext" href="#Loading-and-saving-vega-specifications-1">Loading and saving vega specifications</a></li></ul></li></ul></li><li><span class="toctext">Examples</span><ul><li><a class="toctext" href="../../examples/examples_simplecharts/">Simple Charts</a></li><li><span class="toctext">Single-View Plots</span><ul><li><a class="toctext" href="../../examples/examples_barchartshistograms/">Bar Charts &amp; Histograms</a></li><li><a class="toctext" href="../../examples/examples_scatter_strip_plots/">Scatter &amp; Strip Plots</a></li><li><a class="toctext" href="../../examples/examples_line_charts/">Line Charts</a></li><li><a class="toctext" href="../../examples/examples_area_Charts_streamgraphs/">Area Charts &amp; Streamgraphs</a></li><li><a class="toctext" href="../../examples/examples_table_based_plots/">Table-based Plots</a></li></ul></li><li><span class="toctext">Layered Plots</span><ul><li><a class="toctext" href="../../examples/examples_error_bars_bands/">Error Bars &amp; Error Bands</a></li><li><a class="toctext" href="../../examples/examples_box_plots/">Box Plots</a></li></ul></li><li><span class="toctext">Multi-View Displays</span><ul><li><a class="toctext" href="../../examples/examples_faceting/">Faceting (Trellis Plot / Small Multiples)</a></li><li><a class="toctext" href="../../examples/examples_repeat_concatenation/">Repeat &amp; Concatenation</a></li></ul></li><li><a class="toctext" href="../../examples/examples_maps/">Maps (Geographic Displays)</a></li></ul></li><li><span class="toctext">Reference Manual</span><ul><li><a class="toctext" href="../../referencemanual/global/">Global settings</a></li><li><a class="toctext" href="../../referencemanual/output/">Outputs</a></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li>User Guide</li><li><a href>Using Vega</a></li></ul><a class="edit-page" href="https://github.com/fredo-dedup/VegaLite.jl/blob/master/docs/src/userguide/vega.md"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Using Vega</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Using-Vega-1" href="#Using-Vega-1">Using Vega</a></h1><p>Basic support for Vega graphics is supported as part of VegaLite.jl.  Vega specifications are more verbose than VegaLite specifications, but with that verbosity comes more control/options - see the <a href="https://vega.github.io/vega/docs/">Vega documentation</a> for details on creating Vega plots.</p><p>VegaLite.jl supports rendering Vega JSON specification graphics with interactivity via the REPL (launching a browser if available) or JupyterLab.  There are two methods to do this: the <code>vg_str</code> macro or directly creating a <code>VGSpec</code> with parsed JSON.</p><h2><a class="nav-anchor" id="The-vg-string-macro-1" href="#The-vg-string-macro-1">The <code>vg</code> string macro</a></h2><p>Similar to the <code>vl</code> string macro, the <code>vg</code> string macro takes the Vega spec as a JSON string and returns and renders a <code>VGSpec</code>.</p><pre><code class="language-julia">using VegaLite
+
+spec = vg&quot;&quot;&quot;
+  {
+  &quot;$schema&quot;: &quot;https://vega.github.io/schema/vega/v4.4.json&quot;,
+  &quot;width&quot;: 400,
+  &quot;height&quot;: 200,
+  &quot;padding&quot;: 5,
+
+  &quot;data&quot;: [
+    {
+      &quot;name&quot;: &quot;table&quot;,
+      &quot;values&quot;: [
+        {&quot;category&quot;: &quot;A&quot;, &quot;amount&quot;: 28},
+        {&quot;category&quot;: &quot;B&quot;, &quot;amount&quot;: 55},
+        {&quot;category&quot;: &quot;C&quot;, &quot;amount&quot;: 43},
+        {&quot;category&quot;: &quot;D&quot;, &quot;amount&quot;: 91},
+        {&quot;category&quot;: &quot;E&quot;, &quot;amount&quot;: 81},
+        {&quot;category&quot;: &quot;F&quot;, &quot;amount&quot;: 53},
+        {&quot;category&quot;: &quot;G&quot;, &quot;amount&quot;: 19},
+        {&quot;category&quot;: &quot;H&quot;, &quot;amount&quot;: 87}
+      ]
+    }
+  ],
+
+  &quot;signals&quot;: [
+    {
+      &quot;name&quot;: &quot;tooltip&quot;,
+      &quot;value&quot;: {},
+      &quot;on&quot;: [
+        {&quot;events&quot;: &quot;rect:mouseover&quot;, &quot;update&quot;: &quot;datum&quot;},
+        {&quot;events&quot;: &quot;rect:mouseout&quot;,  &quot;update&quot;: &quot;{}&quot;}
+      ]
+    }
+  ],
+
+  &quot;scales&quot;: [
+    {
+      &quot;name&quot;: &quot;xscale&quot;,
+      &quot;type&quot;: &quot;band&quot;,
+      &quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;category&quot;},
+      &quot;range&quot;: &quot;width&quot;,
+      &quot;padding&quot;: 0.05,
+      &quot;round&quot;: true
+    },
+    {
+      &quot;name&quot;: &quot;yscale&quot;,
+      &quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;amount&quot;},
+      &quot;nice&quot;: true,
+      &quot;range&quot;: &quot;height&quot;
+    }
+  ],
+
+  &quot;axes&quot;: [
+    { &quot;orient&quot;: &quot;bottom&quot;, &quot;scale&quot;: &quot;xscale&quot; },
+    { &quot;orient&quot;: &quot;left&quot;, &quot;scale&quot;: &quot;yscale&quot; }
+  ],
+
+  &quot;marks&quot;: [
+    {
+      &quot;type&quot;: &quot;rect&quot;,
+      &quot;from&quot;: {&quot;data&quot;:&quot;table&quot;},
+      &quot;encode&quot;: {
+        &quot;enter&quot;: {
+          &quot;x&quot;: {&quot;scale&quot;: &quot;xscale&quot;, &quot;field&quot;: &quot;category&quot;},
+          &quot;width&quot;: {&quot;scale&quot;: &quot;xscale&quot;, &quot;band&quot;: 1},
+          &quot;y&quot;: {&quot;scale&quot;: &quot;yscale&quot;, &quot;field&quot;: &quot;amount&quot;},
+          &quot;y2&quot;: {&quot;scale&quot;: &quot;yscale&quot;, &quot;value&quot;: 0}
+        },
+        &quot;update&quot;: {
+          &quot;fill&quot;: {&quot;value&quot;: &quot;steelblue&quot;}
+        },
+        &quot;hover&quot;: {
+          &quot;fill&quot;: {&quot;value&quot;: &quot;red&quot;}
+        }
+      }
+    },
+    {
+      &quot;type&quot;: &quot;text&quot;,
+      &quot;encode&quot;: {
+        &quot;enter&quot;: {
+          &quot;align&quot;: {&quot;value&quot;: &quot;center&quot;},
+          &quot;baseline&quot;: {&quot;value&quot;: &quot;bottom&quot;},
+          &quot;fill&quot;: {&quot;value&quot;: &quot;#333&quot;}
+        },
+        &quot;update&quot;: {
+          &quot;x&quot;: {&quot;scale&quot;: &quot;xscale&quot;, &quot;signal&quot;: &quot;tooltip.category&quot;, &quot;band&quot;: 0.5},
+          &quot;y&quot;: {&quot;scale&quot;: &quot;yscale&quot;, &quot;signal&quot;: &quot;tooltip.amount&quot;, &quot;offset&quot;: -2},
+          &quot;text&quot;: {&quot;signal&quot;: &quot;tooltip.amount&quot;},
+          &quot;fillOpacity&quot;: [
+            {&quot;test&quot;: &quot;datum === tooltip&quot;, &quot;value&quot;: 0},
+            {&quot;value&quot;: 1}
+          ]
+        }
+      }
+    }
+  ]
+  }
+  &quot;&quot;&quot;</code></pre><h2><a class="nav-anchor" id="VGSpec-1" href="#VGSpec-1">VGSpec</a></h2><p>When parameterizing a Vega spec via a function, it is often simpler to construct a <code>VGSpec</code> structure directly.</p><pre><code class="language-julia">using VegaLite
+using JSON
+
+function bar_plot(data)
+  json_data = json(data)
+
+  spec = &quot;&quot;&quot;
+    {
+    &quot;$schema&quot;: &quot;https://vega.github.io/schema/vega/v4.4.json&quot;,
+    &quot;width&quot;: 400,
+    &quot;height&quot;: 200,
+    &quot;padding&quot;: 5,
+
+    &quot;data&quot;: [
+      {
+        &quot;name&quot;: &quot;table&quot;,
+        &quot;values&quot;: $(json_data)
+      }
+    ],
+
+    &quot;signals&quot;: [
+      {
+        &quot;name&quot;: &quot;tooltip&quot;,
+        &quot;value&quot;: {},
+        &quot;on&quot;: [
+          {&quot;events&quot;: &quot;rect:mouseover&quot;, &quot;update&quot;: &quot;datum&quot;},
+          {&quot;events&quot;: &quot;rect:mouseout&quot;,  &quot;update&quot;: &quot;{}&quot;}
+        ]
+      }
+    ],
+
+    &quot;scales&quot;: [
+      {
+        &quot;name&quot;: &quot;xscale&quot;,
+        &quot;type&quot;: &quot;band&quot;,
+        &quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;category&quot;},
+        &quot;range&quot;: &quot;width&quot;,
+        &quot;padding&quot;: 0.05,
+        &quot;round&quot;: true
+      },
+      {
+        &quot;name&quot;: &quot;yscale&quot;,
+        &quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;amount&quot;},
+        &quot;nice&quot;: true,
+        &quot;range&quot;: &quot;height&quot;
+      }
+    ],
+
+    &quot;axes&quot;: [
+      { &quot;orient&quot;: &quot;bottom&quot;, &quot;scale&quot;: &quot;xscale&quot; },
+      { &quot;orient&quot;: &quot;left&quot;, &quot;scale&quot;: &quot;yscale&quot; }
+    ],
+
+    &quot;marks&quot;: [
+      {
+        &quot;type&quot;: &quot;rect&quot;,
+        &quot;from&quot;: {&quot;data&quot;:&quot;table&quot;},
+        &quot;encode&quot;: {
+          &quot;enter&quot;: {
+            &quot;x&quot;: {&quot;scale&quot;: &quot;xscale&quot;, &quot;field&quot;: &quot;category&quot;},
+            &quot;width&quot;: {&quot;scale&quot;: &quot;xscale&quot;, &quot;band&quot;: 1},
+            &quot;y&quot;: {&quot;scale&quot;: &quot;yscale&quot;, &quot;field&quot;: &quot;amount&quot;},
+            &quot;y2&quot;: {&quot;scale&quot;: &quot;yscale&quot;, &quot;value&quot;: 0}
+          },
+          &quot;update&quot;: {
+            &quot;fill&quot;: {&quot;value&quot;: &quot;steelblue&quot;}
+          },
+          &quot;hover&quot;: {
+            &quot;fill&quot;: {&quot;value&quot;: &quot;red&quot;}
+          }
+        }
+      },
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;encode&quot;: {
+          &quot;enter&quot;: {
+            &quot;align&quot;: {&quot;value&quot;: &quot;center&quot;},
+            &quot;baseline&quot;: {&quot;value&quot;: &quot;bottom&quot;},
+            &quot;fill&quot;: {&quot;value&quot;: &quot;#333&quot;}
+          },
+          &quot;update&quot;: {
+            &quot;x&quot;: {&quot;scale&quot;: &quot;xscale&quot;, &quot;signal&quot;: &quot;tooltip.category&quot;, &quot;band&quot;: 0.5},
+            &quot;y&quot;: {&quot;scale&quot;: &quot;yscale&quot;, &quot;signal&quot;: &quot;tooltip.amount&quot;, &quot;offset&quot;: -2},
+            &quot;text&quot;: {&quot;signal&quot;: &quot;tooltip.amount&quot;},
+            &quot;fillOpacity&quot;: [
+              {&quot;test&quot;: &quot;datum === tooltip&quot;, &quot;value&quot;: 0},
+              {&quot;value&quot;: 1}
+            ]
+          }
+        }
+      }
+    ]
+    }
+  &quot;&quot;&quot;
+
+  return VegaLite.VGSpec(JSON.parse(spec))
+end
+
+d = [(category=&quot;A&quot;, amount=28),
+    category=&quot;B&quot;, amount=55),
+    category=&quot;C&quot;, amount=43),
+    category=&quot;D&quot;, amount=91),
+    category=&quot;E&quot;, amount=81),
+    category=&quot;F&quot;, amount=53),
+    category=&quot;G&quot;, amount=19),
+    category=&quot;H&quot;, amount=87)]
+
+bar_plot(d)</code></pre><h2><a class="nav-anchor" id="Loading-and-saving-vega-specifications-1" href="#Loading-and-saving-vega-specifications-1">Loading and saving vega specifications</a></h2><p>The <code>load</code> and <code>save</code> functions can be used to load and save vega specifications to and from disc. The following example loads a vega specification from a file named <code>myfigure.vega</code>:</p><pre><code class="language-julia">using VegaLite
+
+spec = loadvgspec(&quot;myfigure.vega&quot;)</code></pre><p>To save a <code>VGSpec</code> to a file on disc, use the <code>save</code> function:</p><pre><code class="language-julia">using VegaLite
+
+spec = ... # Aquire a spec from somewhere
+
+savespec(&quot;myfigure.vega&quot;, spec)</code></pre><div class="admonition note"><div class="admonition-title">Note</div><div class="admonition-text"><p>Using the <code>load</code> and <code>save</code> function will be enabled in a future release. For now you should use <code>loadvgspec</code> and <code>savespec</code> instead (both of these functions will be deprecated once <code>load</code> and <code>save</code> are enabled).</p></div></div><footer><hr/><a class="previous" href="../data/"><span class="direction">Previous</span><span class="title">Data sources</span></a><a class="next" href="../../examples/examples_simplecharts/"><span class="direction">Next</span><span class="title">Simple Charts</span></a></footer></article></body></html>

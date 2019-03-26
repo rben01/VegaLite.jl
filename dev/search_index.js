@@ -21,7 +21,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Overview",
     "category": "section",
-    "text": "VegaLite.jl is a plotting package for the julia programming language. The package is based on Vega-Lite, which extends a traditional grammar of graphics API into a grammar of interactive graphics.VegaLite.jl allows you to create a wide range of statistical plots. It exposes the full functionality of the underlying Vega-Lite and is a the same time tightly integrated into the julia ecosystem. Here is an example of a scatter plot:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon,\n    color=:Origin,\n    width=400,\n    height=400\n)"
+    "text": "VegaLite.jl is a plotting package for the julia programming language. The package is based on Vega-Lite, which extends a traditional grammar of graphics API into a grammar of interactive graphics. Along with Vega-Lite, there is basic support for Vega graphics.VegaLite.jl allows you to create a wide range of statistical plots. It exposes the full functionality of the underlying Vega-Lite and is a the same time tightly integrated into the julia ecosystem. Here is an example of a scatter plot:using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon,\n    color=:Origin,\n    width=400,\n    height=400\n)"
 },
 
 {
@@ -358,6 +358,46 @@ var documenterSearchIndex = {"docs": [
     "title": "Using paths and URIs with the data keyword",
     "category": "section",
     "text": "You can directly pass a path or URI to the data keyword in a @vlplot call, similar to how you can pass inline data:# Plotting data from a local file\n@vlplot(:point, data=p\"subfolder/file.csv\", x=:a, y=:b)\n\n# Plotting data from a URI\n@vlplot(:point, data=URI(\"https://www.foo.com/bar.json\"), x=:a, y=:b)Sometimes you need to specify additional configuration parameters for an external data source that are supported by the Vega-Lite specification. In that case you can also pass the path or URI instance to the url sub-key in the data part of a plot specification:@vlplot(\n    :point,\n    data={\n        url=p\"subfolder/foo.txt\",\n        format={\n            typ=:csv\n        }\n    },\n    x=:a,\n    y=:b\n)"
+},
+
+{
+    "location": "userguide/vega/#",
+    "page": "Using Vega",
+    "title": "Using Vega",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "userguide/vega/#Using-Vega-1",
+    "page": "Using Vega",
+    "title": "Using Vega",
+    "category": "section",
+    "text": "Basic support for Vega graphics is supported as part of VegaLite.jl.  Vega specifications are more verbose than VegaLite specifications, but with that verbosity comes more control/options - see the Vega documentation for details on creating Vega plots.VegaLite.jl supports rendering Vega JSON specification graphics with interactivity via the REPL (launching a browser if available) or JupyterLab.  There are two methods to do this: the vg_str macro or directly creating a VGSpec with parsed JSON."
+},
+
+{
+    "location": "userguide/vega/#The-vg-string-macro-1",
+    "page": "Using Vega",
+    "title": "The vg string macro",
+    "category": "section",
+    "text": "Similar to the vl string macro, the vg string macro takes the Vega spec as a JSON string and returns and renders a VGSpec.using VegaLite\n\nspec = vg\"\"\"\n  {\n  \"$schema\": \"https://vega.github.io/schema/vega/v4.4.json\",\n  \"width\": 400,\n  \"height\": 200,\n  \"padding\": 5,\n\n  \"data\": [\n    {\n      \"name\": \"table\",\n      \"values\": [\n        {\"category\": \"A\", \"amount\": 28},\n        {\"category\": \"B\", \"amount\": 55},\n        {\"category\": \"C\", \"amount\": 43},\n        {\"category\": \"D\", \"amount\": 91},\n        {\"category\": \"E\", \"amount\": 81},\n        {\"category\": \"F\", \"amount\": 53},\n        {\"category\": \"G\", \"amount\": 19},\n        {\"category\": \"H\", \"amount\": 87}\n      ]\n    }\n  ],\n\n  \"signals\": [\n    {\n      \"name\": \"tooltip\",\n      \"value\": {},\n      \"on\": [\n        {\"events\": \"rect:mouseover\", \"update\": \"datum\"},\n        {\"events\": \"rect:mouseout\",  \"update\": \"{}\"}\n      ]\n    }\n  ],\n\n  \"scales\": [\n    {\n      \"name\": \"xscale\",\n      \"type\": \"band\",\n      \"domain\": {\"data\": \"table\", \"field\": \"category\"},\n      \"range\": \"width\",\n      \"padding\": 0.05,\n      \"round\": true\n    },\n    {\n      \"name\": \"yscale\",\n      \"domain\": {\"data\": \"table\", \"field\": \"amount\"},\n      \"nice\": true,\n      \"range\": \"height\"\n    }\n  ],\n\n  \"axes\": [\n    { \"orient\": \"bottom\", \"scale\": \"xscale\" },\n    { \"orient\": \"left\", \"scale\": \"yscale\" }\n  ],\n\n  \"marks\": [\n    {\n      \"type\": \"rect\",\n      \"from\": {\"data\":\"table\"},\n      \"encode\": {\n        \"enter\": {\n          \"x\": {\"scale\": \"xscale\", \"field\": \"category\"},\n          \"width\": {\"scale\": \"xscale\", \"band\": 1},\n          \"y\": {\"scale\": \"yscale\", \"field\": \"amount\"},\n          \"y2\": {\"scale\": \"yscale\", \"value\": 0}\n        },\n        \"update\": {\n          \"fill\": {\"value\": \"steelblue\"}\n        },\n        \"hover\": {\n          \"fill\": {\"value\": \"red\"}\n        }\n      }\n    },\n    {\n      \"type\": \"text\",\n      \"encode\": {\n        \"enter\": {\n          \"align\": {\"value\": \"center\"},\n          \"baseline\": {\"value\": \"bottom\"},\n          \"fill\": {\"value\": \"#333\"}\n        },\n        \"update\": {\n          \"x\": {\"scale\": \"xscale\", \"signal\": \"tooltip.category\", \"band\": 0.5},\n          \"y\": {\"scale\": \"yscale\", \"signal\": \"tooltip.amount\", \"offset\": -2},\n          \"text\": {\"signal\": \"tooltip.amount\"},\n          \"fillOpacity\": [\n            {\"test\": \"datum === tooltip\", \"value\": 0},\n            {\"value\": 1}\n          ]\n        }\n      }\n    }\n  ]\n  }\n  \"\"\""
+},
+
+{
+    "location": "userguide/vega/#VGSpec-1",
+    "page": "Using Vega",
+    "title": "VGSpec",
+    "category": "section",
+    "text": "When parameterizing a Vega spec via a function, it is often simpler to construct a VGSpec structure directly.using VegaLite\nusing JSON\n\nfunction bar_plot(data)\n  json_data = json(data)\n\n  spec = \"\"\"\n    {\n    \"$schema\": \"https://vega.github.io/schema/vega/v4.4.json\",\n    \"width\": 400,\n    \"height\": 200,\n    \"padding\": 5,\n\n    \"data\": [\n      {\n        \"name\": \"table\",\n        \"values\": $(json_data)\n      }\n    ],\n\n    \"signals\": [\n      {\n        \"name\": \"tooltip\",\n        \"value\": {},\n        \"on\": [\n          {\"events\": \"rect:mouseover\", \"update\": \"datum\"},\n          {\"events\": \"rect:mouseout\",  \"update\": \"{}\"}\n        ]\n      }\n    ],\n\n    \"scales\": [\n      {\n        \"name\": \"xscale\",\n        \"type\": \"band\",\n        \"domain\": {\"data\": \"table\", \"field\": \"category\"},\n        \"range\": \"width\",\n        \"padding\": 0.05,\n        \"round\": true\n      },\n      {\n        \"name\": \"yscale\",\n        \"domain\": {\"data\": \"table\", \"field\": \"amount\"},\n        \"nice\": true,\n        \"range\": \"height\"\n      }\n    ],\n\n    \"axes\": [\n      { \"orient\": \"bottom\", \"scale\": \"xscale\" },\n      { \"orient\": \"left\", \"scale\": \"yscale\" }\n    ],\n\n    \"marks\": [\n      {\n        \"type\": \"rect\",\n        \"from\": {\"data\":\"table\"},\n        \"encode\": {\n          \"enter\": {\n            \"x\": {\"scale\": \"xscale\", \"field\": \"category\"},\n            \"width\": {\"scale\": \"xscale\", \"band\": 1},\n            \"y\": {\"scale\": \"yscale\", \"field\": \"amount\"},\n            \"y2\": {\"scale\": \"yscale\", \"value\": 0}\n          },\n          \"update\": {\n            \"fill\": {\"value\": \"steelblue\"}\n          },\n          \"hover\": {\n            \"fill\": {\"value\": \"red\"}\n          }\n        }\n      },\n      {\n        \"type\": \"text\",\n        \"encode\": {\n          \"enter\": {\n            \"align\": {\"value\": \"center\"},\n            \"baseline\": {\"value\": \"bottom\"},\n            \"fill\": {\"value\": \"#333\"}\n          },\n          \"update\": {\n            \"x\": {\"scale\": \"xscale\", \"signal\": \"tooltip.category\", \"band\": 0.5},\n            \"y\": {\"scale\": \"yscale\", \"signal\": \"tooltip.amount\", \"offset\": -2},\n            \"text\": {\"signal\": \"tooltip.amount\"},\n            \"fillOpacity\": [\n              {\"test\": \"datum === tooltip\", \"value\": 0},\n              {\"value\": 1}\n            ]\n          }\n        }\n      }\n    ]\n    }\n  \"\"\"\n\n  return VegaLite.VGSpec(JSON.parse(spec))\nend\n\nd = [(category=\"A\", amount=28),\n    category=\"B\", amount=55),\n    category=\"C\", amount=43),\n    category=\"D\", amount=91),\n    category=\"E\", amount=81),\n    category=\"F\", amount=53),\n    category=\"G\", amount=19),\n    category=\"H\", amount=87)]\n\nbar_plot(d)"
+},
+
+{
+    "location": "userguide/vega/#Loading-and-saving-vega-specifications-1",
+    "page": "Using Vega",
+    "title": "Loading and saving vega specifications",
+    "category": "section",
+    "text": "The load and save functions can be used to load and save vega specifications to and from disc. The following example loads a vega specification from a file named myfigure.vega:using VegaLite\n\nspec = loadvgspec(\"myfigure.vega\")To save a VGSpec to a file on disc, use the save function:using VegaLite\n\nspec = ... # Aquire a spec from somewhere\n\nsavespec(\"myfigure.vega\", spec)note: Note\nUsing the load and save function will be enabled in a future release. For now you should use loadvgspec and savespec instead (both of these functions will be deprecated once load and save are enabled)."
 },
 
 {
