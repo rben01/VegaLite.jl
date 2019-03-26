@@ -517,7 +517,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Bar Charts & Histograms",
     "title": "Grouped Bar Chart",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year == 2000\"},\n        {calculate=\"datum.sex == 2 ? \'Female\' : \'Male\'\", as=\"gender\"}\n    ],\n    enc={\n        column=\"age:o\",\n        y={\"sum(people)\", axis={title=\"population\", grid=false}},\n        x={\"gender:n\", scale={rangeStep=12}, axis={title=\"\"}},\n        color={\"gender:n\", scale={range=[\"#EA98D2\", \"#659CCA\"]}},\n    },\n    config={\n        view={stroke=:transparent},\n        axis={domainWidth=1}\n    }\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year == 2000\"},\n        {calculate=\"datum.sex == 2 ? \'Female\' : \'Male\'\", as=\"gender\"}\n    ],\n    column=\"age:o\",\n    y={\"sum(people)\", axis={title=\"population\", grid=false}},\n    x={\"gender:n\", scale={rangeStep=12}, axis={title=\"\"}},\n    color={\"gender:n\", scale={range=[\"#EA98D2\", \"#659CCA\"]}},\n    spacing=10,\n    config={\n        view={stroke=:transparent},\n        axis={domainWidth=1}\n    }\n)"
 },
 
 {
@@ -541,7 +541,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Bar Charts & Histograms",
     "title": "Normalized Stacked Bar Chart",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year == 2000\"},\n        {calculate=\"datum.sex==2 ? \'Female\' : \'Male\'\",as=\"gender\"}\n    ],\n    enc={\n        y={\n            \"sum(people)\",\n            axis={title=\"population\"},\n            stack=:normalize\n        },\n        x={\n            \"age:o\",\n            scale={rangeStep=17}\n        },\n        color={\n            \"gender:n\",\n            scale={range=[\"#EA98D2\", \"#659CCA\"]}\n        }\n    }\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year == 2000\"},\n        {calculate=\"datum.sex==2 ? \'Female\' : \'Male\'\",as=\"gender\"}\n    ],\n    y={\n        \"sum(people)\",\n        axis={title=\"population\"},\n        stack=:normalize\n    },\n    x={\n        \"age:o\",\n        scale={rangeStep=17}\n    },\n    color={\n        \"gender:n\",\n        scale={range=[\"#EA98D2\", \"#659CCA\"]}\n    }\n)"
 },
 
 {
@@ -549,7 +549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Bar Charts & Histograms",
     "title": "Gantt Chart (Ranged Bar Marks)",
     "category": "section",
-    "text": "using VegaLite\n\n@vlplot(\n    :bar,\n    data={\n        values=[\n            {task=\"A\",start=1,stop=3},\n            {task=\"B\",start=3,stop=8},\n            {task=\"C\",start=8,stop=10}\n        ]\n    },\n    enc={\n        y=\"task:o\",\n        x=\"start:q\",\n        x2=\"stop:q\"\n    }\n)"
+    "text": "using VegaLite\n\n@vlplot(\n    :bar,\n    data={\n        values=[\n            {task=\"A\",start=1,stop=3},\n            {task=\"B\",start=3,stop=8},\n            {task=\"C\",start=8,stop=10}\n        ]\n    },\n    y=\"task:o\",\n    x=\"start:q\",\n    x2=\"stop:q\"\n)"
 },
 
 {
@@ -565,7 +565,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Bar Charts & Histograms",
     "title": "Layered Bar Chart",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year==2000\"},\n        {calculate=\"datum.sex==2 ? \'Female\' : \'Male\'\",as=\"gender\"}\n    ],\n    enc={\n        x={\"age:o\", scale={rangeStep=17}},\n        y={\"sum(people)\", axis={title=\"population\"}, stack=nothing},\n        color={\"gender:n\", scale={range=[\"#e377c2\", \"#1f77b4\"]}},\n        opacity={value=0.7}\n    }\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    :bar,\n    transform=[\n        {filter=\"datum.year==2000\"},\n        {calculate=\"datum.sex==2 ? \'Female\' : \'Male\'\",as=\"gender\"}\n    ],\n    x={\"age:o\", scale={rangeStep=17}},\n    y={\"sum(people)\", axis={title=\"population\"}, stack=nothing},\n    color={\"gender:n\", scale={range=[\"#e377c2\", \"#1f77b4\"]}},\n    opacity={value=0.7}\n)"
 },
 
 {
@@ -581,7 +581,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Bar Charts & Histograms",
     "title": "Simple Bar Chart with Labels",
     "category": "section",
-    "text": "using VegaLite\n\n@vlplot(\n    data={\n        values=[\n            {a=\"A\",b=28},\n            {a=\"B\",b=55},\n            {a=\"C\",b=43}\n        ]\n    },\n    y=\"a:o\",\n    x=\"b:q\"\n) +\n@vlplot(:bar) +\n@vlplot(\n    mark={\n        :text,\n        align=:left,\n        baseline=:middle,\n        dx=3\n    },\n    enc={\n        text=\"b:q\"\n    }\n)"
+    "text": "using VegaLite\n\n@vlplot(\n    data={\n        values=[\n            {a=\"A\",b=28},\n            {a=\"B\",b=55},\n            {a=\"C\",b=43}\n        ]\n    },\n    y=\"a:o\",\n    x=\"b:q\"\n) +\n@vlplot(:bar) +\n@vlplot(\n    mark={\n        :text,\n        align=:left,\n        baseline=:middle,\n        dx=3\n    },\n    text=\"b:q\"\n)"
 },
 
 {
@@ -669,7 +669,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Scatter & Strip Plots",
     "title": "Bubble Plot (Gapminder)",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"gapminder-health-income\") |>\n@vlplot(\n    :circle,\n    width=500,height=300,\n    selection={\n        view={typ=:interval, bind=:scales}\n    },\n    y={:health, scale={zero=false}},\n    x={:income, scale={typ=:log}},\n    size=:population,\n    color={value=\"#000\"}\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"gapminder-health-income\") |>\n@vlplot(\n    :circle,\n    width=500,height=300,\n    selection={\n        view={typ=:interval, bind=:scales}\n    },\n    y={:health, scale={zero=false}, axis={minExtent=30}},\n    x={:income, scale={typ=:log}},\n    size=:population,\n    color={value=\"#000\"}\n)"
 },
 
 {
@@ -677,7 +677,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Scatter & Strip Plots",
     "title": "Bubble Plot (Natural Disasters)",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"disasters\") |>\n@vlplot(\n    width=600,height=400,\n    transform=[\n        {filter=\"datum.Entity !== \'All natural disasters\'\"}\n    ],\n    mark={\n        :circle,\n        opacity=0.8,\n        stroke=:black,\n        strokeWidth=1\n    },\n    enc={\n        x={\"Year:o\", axis={labelAngle=0}},\n        y={:Entity, axis={title=\"\"}},\n        size={\n            :Deaths,\n            legend={title=\"Annual Global Deaths\"},\n            scale={range=[0,5000]}\n        },\n        color={:Entity, legend=nothing}\n    }\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"disasters\") |>\n@vlplot(\n    width=600,height=400,\n    transform=[\n        {filter=\"datum.Entity !== \'All natural disasters\'\"}\n    ],\n    mark={\n        :circle,\n        opacity=0.8,\n        stroke=:black,\n        strokeWidth=1\n    },\n    x={\"Year:o\", axis={labelAngle=0}},\n    y={:Entity, axis={title=\"\"}},\n    size={\n        :Deaths,\n        legend={title=\"Annual Global Deaths\"},\n        scale={range=[0,5000]}\n    },\n    color={:Entity, legend=nothing}\n)"
 },
 
 {
@@ -709,15 +709,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Line Charts",
     "title": "Line Chart",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :line,\n    transform=[\n        {filter=\"datum.symbol==\'GOOG\'\"}\n    ],\n    x={\"date:t\", axis={format=\"%Y\"}},\n    y=:price\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :line,\n    transform=[\n        {filter=\"datum.symbol==\'GOOG\'\"}\n    ],\n    x=\"date:t\",\n    y=:price\n)"
 },
 
 {
-    "location": "examples/examples_line_charts/#Line-Chart-with-Overlaying-Point-Markers-1",
+    "location": "examples/examples_line_charts/#Line-Chart-with-Point-Markers-1",
     "page": "Line Charts",
-    "title": "Line Chart with Overlaying Point Markers",
+    "title": "Line Chart with Point Markers",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    transform=[{filter=\"datum.symbol===\'GOOG\'\"}],\n    mark={\n        :line,\n        color=:green,\n        point={\n            color=:red\n        }\n    },\n    x=\"date:t\",\n    y=:price\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    transform=[{filter=\"datum.symbol===\'GOOG\'\"}],\n    mark={\n        :line,\n        point=true\n    },\n    x=\"year(date)\",\n    y=\"mean(price)\",\n    color=:symbol\n)"
+},
+
+{
+    "location": "examples/examples_line_charts/#Line-Chart-with-Stroked-Point-Markers-1",
+    "page": "Line Charts",
+    "title": "Line Chart with Stroked Point Markers",
+    "category": "section",
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    transform=[{filter=\"datum.symbol===\'GOOG\'\"}],\n    mark={\n        :line,\n        point={filled=false, fill=:white}\n    },\n    x=\"year(date)\",\n    y=\"mean(price)\",\n    color=:symbol\n)"
 },
 
 {
@@ -725,7 +733,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Line Charts",
     "title": "Multi Series Line Chart",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :line,\n    x={\"date:t\", axis={format=\"%Y\"}},\n    y=:price,\n    color=:symbol\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :line,\n    x=\"date:t\",\n    y=:price,\n    color=:symbol\n)"
 },
 
 {
@@ -925,7 +933,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Error Bars & Error Bands",
     "title": "Error Bars showing Confidence Interval",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot() +\n@vlplot(\n    mark={\n        :point,\n        filled=true\n    },\n    x={\n        \"mean(yield)\",\n        scale={zero=false},\n        axis={title=\"Barley Yield\"}\n    },\n    y={\n        \"variety:o\",\n        color={value=:black}\n    }\n) +\n@vlplot(:rule, x=\"ci0(yield)\", x2=\"ci1(yield)\", y=\"variety:o\")"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(y=\"variety:o\") +\n@vlplot(\n    mark={\n        :point,\n        filled=true\n    },\n    x={\n        \"mean(yield)\",\n        scale={zero=false},\n        title=\"Barley Yield\"\n    },\n    color={value=:black}\n) +\n@vlplot(\n    mark={\n        :errorbar,\n        extent=:ci\n     },\n     x={\"yield:q\", title=\"Barley Yield\"}\n)"
 },
 
 {
@@ -933,7 +941,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Error Bars & Error Bands",
     "title": "Error Bars showing Standard Deviation",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(\n    transform=[\n        {\n            aggregate=[\n                {op=:mean, field=:yield, as=:mean},\n                {op=:stdev, field=:yield, as=:stdev}\n            ],\n            groupby=[:variety]\n        },\n        {calculate=\"datum.mean-datum.stdev\", as=:lower},\n        {calculate=\"datum.mean+datum.stdev\", as=:upper}\n    ]\n) +\n@vlplot(\n    mark={\n        :point,\n        filled=true\n    },\n    x={\n        \"mean:q\",\n        scale={zero=false},\n        axis={title=\"Barley Yield\"}\n    },\n    y=\"variety:o\",\n    color={value=:black}\n) +\n@vlplot(:rule, x=\"upper:q\", x2=\"lower:q\", y=\"variety:o\")"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(\n    y=\"variety:o\"\n) +\n@vlplot(\n    mark={\n        :point,\n        filled=true\n    },\n    x={\n        \"mean(yield)\",\n        scale={zero=false},\n        title=\"Barley Yield\"\n    },\n    color={value=:black}\n) +\n@vlplot(\n    mark={:rule, extend=:stdev},\n    x={:yield, title=\"Barley Yield\"}\n)"
 },
 
 {
@@ -941,7 +949,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Error Bars & Error Bands",
     "title": "Line Chart with Confidence Interval Band",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :area,\n    x=\"year(Year):t\",\n    y={\n        \"ci0(Miles_per_Gallon)\",\n        axis={title=\"Mean of Miles per Gallon (95% CIs)\"}\n    },\n    y2=\"ci1(Miles_per_Gallon)\",\n    opacity={value=0.3}\n) +\n@vlplot(\n    :line,\n    x=\"year(Year)\",\n    y=\"mean(Miles_per_Gallon)\"\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(x=\"year(Year)) +\n@vlplot(\n    mark={:errorband, extend=:ci},\n    y={\n        :Miles_per_Gallon,\n        title=\"Mean of Miles per Gallon (95% CIs)\"\n    }\n) +\n@vlplot(\n    :line,\n    y=\"mean(Miles_per_Gallon)\"\n)"
 },
 
 {
@@ -949,7 +957,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Error Bars & Error Bands",
     "title": "Scatterplot with Mean and Standard Deviation Overlay",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon\n) +\n(\n    @vlplot(\n        transform=[\n            {aggregate=[\n                {op=:mean, field=:Miles_per_Gallon, as=:mean_MPG},\n                {op=:stdev, field=:Miles_per_Gallon, as=:dev_MPG}\n                ],\n                groupby=[]\n            },\n            {calculate=\"datum.mean_MPG - datum.dev_MPG\", as=:lower},\n            {calculate=\"datum.mean_MPG + datum.dev_MPG\", as=:upper}\n        ]) +\n    @vlplot(:rule,y={\"mean_MPG:q\",axis=nothing}) +\n    @vlplot(\n        :rect,\n        y={\"lower:q\",axis=nothing},\n        y2=\"upper:q\",\n        opacity={value=0.2}\n    )\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon\n) +\n@vlplot(:rule,y={\"mean(Miles_per_Gallon)\") +\n@vlplot(\n    mark={:errorband, extent=:stdev, opacity=0.2},\n    y={\"Miles_per_Gallon\", title=\"Miles per Gallon\"\n)"
 },
 
 {
@@ -973,7 +981,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Box Plots",
     "title": "Box Plot with Min/Max Whiskers",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    transform=[{\n        aggregate=[\n            {op=:q1, field=:people, as=:lowerBox},\n            {op=:q3, field=:people, as=:upperBox},\n            {op=:median, field=:people, as=:midBox},\n            {op=:min, field=:people, as=:lowerWhisker},\n            {op=:max, field=:people, as=:upperWhisker}\n        ],\n        groupby=[:age]\n    }]\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y={\"lowerWhisker:q\", axis={title=\"population\"}},\n    y2=\"lowerBox:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y=\"upperBox:q\",\n    y2=\"upperWhisker:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:bar, style=:box},\n    y=\"lowerBox:q\",\n    y2=\"upperBox:q\",\n    x=\"age:o\",\n    size={value=5}\n) +\n@vlplot(\n    mark={:tick, style=:boxMid},\n    y=\"midBox:q\",\n    x=\"age:o\",\n    color={value=:white},\n    size={value=5}\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    mark={:boxplot, extent=\"min-max\"},\n    x=\"age:o\",\n    y={:people, axis={title=\"population\"}}\n)"
 },
 
 {
@@ -981,7 +989,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Box Plots",
     "title": "Tukey Box Plot (1.5 IQR)",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    transform=[\n        {\n            aggregate=[\n                {op=:q1, field=:people, as=:lowerBox},\n                {op=:q3, field=:people, as=:upperBox},\n                {op=:median, field=:people, as=:midBox}\n            ],\n            groupby=[:age]\n        },\n        {\n            calculate=\"datum.upperBox - datum.lowerBox\",\n            as=:IQR\n        },\n        {\n            calculate=\"datum.lowerBox - datum.IQR * 1.5\",\n            as=:lowerWhisker\n        },\n        {\n            calculate=\"datum.upperBox + datum.IQR * 1.5\",\n            as=:upperWhisker\n        }\n    ]\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y={\"lowerWhisker:q\", axis={title=\"population\"}},\n    y2=\"lowerBox:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:rule, style=:boxWhisker},\n    y=\"upperBox:q\",\n    y2=\"upperWhisker:q\",\n    x=\"age:o\"\n) +\n@vlplot(\n    mark={:bar, style=:box},\n    y=\"lowerBox:q\",\n    y2=\"upperBox:q\",\n    x=\"age:o\",\n    size={value=5}\n) +\n@vlplot(\n    mark={:tick, style=:boxMid},\n    y=\"midBox:q\",\n    x=\"age:o\",\n    color={value=:white},\n    size={value=5}\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"population\") |>\n@vlplot(\n    mark={:boxplot, extend=1.5},\n    x=\"age:o\",\n    y={:people, axis={title=\"population\"}},\n    size={value=5}\n)"
 },
 
 {
@@ -1021,7 +1029,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Faceting (Trellis Plot / Small Multiples)",
     "title": "Trellis Scatter Plot",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"movies\") |>\n@vlplot(:point, column=\"MPAA_Rating:o\", x=:Worldwide_Gross, y=:US_DVD_Sales)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"movies\") |>\n@vlplot(:point, columns=2, wrap=\"MPAA_Rating:o\", x=:Worldwide_Gross, y=:US_DVD_Sales)"
 },
 
 {
@@ -1045,7 +1053,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Faceting (Trellis Plot / Small Multiples)",
     "title": "Becker\'s Barley Trellis Plot",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(\n    :point,\n    row=\"site:o\",\n    x={\"median(yield)\", scale={zero=false}},\n    y={\n        \"variety:o\",\n        sort={\n            \"yield\",\n            op=:median,\n            order=:descending\n        },\n        scale={rangeStep=12}},\n    color=:year\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"barley\") |>\n@vlplot(\n    :point,\n    columns=2,\n    wrap={\"site:o\", sort={op=:median, field=:yield}},\n    x={\"median(yield)\", scale={zero=false}},\n    y={\n        \"variety:o\",\n        sort={\n            encoding=:x,\n            order=:descending\n        },\n        scale={rangeStep=12}},\n    color=:year\n)"
 },
 
 {
@@ -1053,7 +1061,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Faceting (Trellis Plot / Small Multiples)",
     "title": "Trellis Area",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :area,\n    width=300,height=40,\n    transform=[{filter=\"datum.symbol !== \'GOOG\'\"}],\n    x={\n        \"date:t\",\n        axis={format=\"%Y\",title=\"Time\",grid=false}\n    },\n    y={\n        :price,\n        axis={title=\"Price\",grid=false}\n    },\n    color={\n        :symbol,\n        legend=nothing\n    },\n    row={\n        :symbol,\n        header={title=\"Symbol\"}\n    }\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"stocks\") |>\n@vlplot(\n    :area,\n    width=300,height=40,\n    transform=[{filter=\"datum.symbol !== \'GOOG\'\"}],\n    x={\n        \"date:t\",\n        axis={title=\"Time\",grid=false}\n    },\n    y={\n        :price,\n        axis={title=\"Price\",grid=false}\n    },\n    color={\n        :symbol,\n        legend=nothing\n    },\n    row={\n        :symbol,\n        header={title=\"Symbol\"}\n    }\n)"
 },
 
 {
