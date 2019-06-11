@@ -949,7 +949,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Error Bars & Error Bands",
     "title": "Line Chart with Confidence Interval Band",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(x=\"year(Year)) +\n@vlplot(\n    mark={:errorband, extend=:ci},\n    y={\n        :Miles_per_Gallon,\n        title=\"Mean of Miles per Gallon (95% CIs)\"\n    }\n) +\n@vlplot(\n    :line,\n    y=\"mean(Miles_per_Gallon)\"\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot(x=\"year(Year)\") +\n@vlplot(\n    mark={:errorband, extent=:ci},\n    y={\n        \"Miles_per_Gallon:q\",\n        title=\"Mean of Miles per Gallon (95% CIs)\"\n    }\n) +\n@vlplot(\n    :line,\n    y=\"mean(Miles_per_Gallon)\"\n)"
 },
 
 {
@@ -957,7 +957,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Error Bars & Error Bands",
     "title": "Scatterplot with Mean and Standard Deviation Overlay",
     "category": "section",
-    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon\n) +\n@vlplot(:rule,y={\"mean(Miles_per_Gallon)\") +\n@vlplot(\n    mark={:errorband, extent=:stdev, opacity=0.2},\n    y={\"Miles_per_Gallon\", title=\"Miles per Gallon\"\n)"
+    "text": "using VegaLite, VegaDatasets\n\ndataset(\"cars\") |>\n@vlplot() +\n@vlplot(\n    :point,\n    x=:Horsepower,\n    y=:Miles_per_Gallon\n) +\n@vlplot(:rule,y={\"mean(Miles_per_Gallon)\") +\n@vlplot(\n    mark={:errorband, extent=:stdev, opacity=0.2},\n    y={\"Miles_per_Gallon\", title=\"Miles per Gallon\"}\n)"
 },
 
 {
