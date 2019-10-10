@@ -209,6 +209,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "userguide/vlspec/#Manipulating-VLSpec-object-directly-1",
+    "page": "Vega-lite specifications",
+    "title": "Manipulating VLSpec object directly",
+    "category": "section",
+    "text": "Vega-Lite properties can be directly accessed as properties of the VLSpec object.julia> spec = [(a=x, b=exp(x), c=sin(x)) for x in 0:10] |>\n           @vlplot(:point, x=:a, y=:b);\n\njulia> spec.mark\n:point\n\njulia> spec.encoding.x.field\n\"a\"To modify properties, use Setfield.jl:julia> using Setfield  # imports `@set` etc.\n\njulia> spec2 = @set spec.mark = :line\n       spec3 = @set spec2.encoding.y.field = \"c\""
+},
+
+{
     "location": "userguide/vlspec/#Loading-and-saving-vega-lite-specifications-1",
     "page": "Vega-lite specifications",
     "title": "Loading and saving vega-lite specifications",
