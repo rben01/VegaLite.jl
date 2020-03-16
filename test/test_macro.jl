@@ -1,5 +1,5 @@
 using VegaLite
-using VegaLite: getparams
+using VegaLite: Vega.getparams
 using JSON
 using Test
 
@@ -21,7 +21,7 @@ spec = vl"""
 """
 
 @test isa(spec, VegaLite.VLSpec)
-@test getparams(spec) == JSON.parse("""
+@test Vega.getparams(spec) == JSON.parse("""
 {
   "data": {
     "values": [

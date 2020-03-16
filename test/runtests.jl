@@ -1,5 +1,6 @@
 using Test
 using VegaLite
+using Vega
 using Dates
 
 @testset "VegaLite" begin

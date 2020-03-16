@@ -1,6 +1,6 @@
 using Test
 using VegaLite
-using VegaLite: getparams
+using VegaLite: Vega.getparams
 using DataFrames
 using Dates
 using FileIO
@@ -19,17 +19,17 @@ vlp = getvlplot()
 
     let json = sprint(io -> save(Stream(fmt, io), plt, indent=indent)),
         code = "vg\"\"\"$json\"\"\""
-        @test getparams(include_string(@__MODULE__, code)) == getparams(plt)
+        @test Vega.getparams(include_string(@__MODULE__, code)) == Vega.getparams(plt)
     end
 
     let io = IOBuffer()
         save(Stream(fmt, io), plt, indent=indent)
         seek(io, 0)
-        @test getparams(load(Stream(fmt, io))) == getparams(plt)
+        @test Vega.getparams(load(Stream(fmt, io))) == Vega.getparams(plt)
     end
 
     let code = repr("text/plain", plt, context=:compact=>false)
-        @test getparams(include_string(@__MODULE__, code)) == getparams(plt)
+        @test Vega.getparams(include_string(@__MODULE__, code)) == Vega.getparams(plt)
     end
 end
 
@@ -82,7 +82,7 @@ Base.Filesystem.mktempdir() do folder
     # save(joinpath(folder,"test4.eps"), vgp)
     # @test isfile(joinpath(folder,"test4.eps"))
 
-    VegaLite.savespec(joinpath(folder,"test1.vegalite"), p)
+    Vega.savespec(joinpath(folder,"test1.vegalite"), p)
     @test isfile(joinpath(folder,"test1.vegalite"))
 
     @test_throws ArgumentError VegaLite.savefig(joinpath(folder,"test1.foo"), p)
@@ -98,9 +98,9 @@ Base.Filesystem.mktempdir() do folder
 
     vgpl1 = getvgplot()
 
-    VegaLite.savespec(joinpath(folder,"test1.vega"), vgpl1, include_data=true)
+    Vega.savespec(joinpath(folder,"test1.vega"), vgpl1, include_data=true)
 
-    vgpl2 = VegaLite.loadvgspec(joinpath(folder,"test1.vega"))
+    vgpl2 = VegaLite.Vega.loadvgspec(joinpath(folder,"test1.vega"))
 
     @test vgpl1 == vgpl1
 
@@ -109,7 +109,7 @@ Base.Filesystem.mktempdir() do folder
     # @test isfile(joinpath(folder,"test3.vega"))
 
     # vgpl3 = load(joinpath(folder,"test3.vega"))
-    # @test isa(vgpl2, VegaLite.VGSpec)
+    # @test isa(vgpl2, Vega.VGSpec)
 
     # save(joinpath(folder,"test4.vega"), vgpl1, include_data=true)
     # @test isfile(joinpath(folder,"test4.vega"))

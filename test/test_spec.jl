@@ -37,11 +37,11 @@ p2 = vl"""
 }
 """
 
-p3 = deletedata(p1)
+p3 = Vega.deletedata(p1)
 @test p3 != p1
 @test p3 == p2
 
-deletedata!(p1)
+Vega.deletedata!(p1)
 
 @test p1 == p2
 
@@ -83,6 +83,6 @@ p4 = vl"""
 
 p5 = dataset("cars").path |> @vlplot(:point, x=:Miles_per_Gallon, y=:Acceleration)
 
-@test haskey(getparams(p5)["data"],"url")
+@test haskey(Vega.getparams(p5)["data"],"url")
 
 end

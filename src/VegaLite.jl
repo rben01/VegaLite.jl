@@ -16,6 +16,7 @@ using Setfield: Setfield, PropertyLens, @lens, @set
 using Pkg.Artifacts
 using DataStructures
 import TableTraitsUtils
+using Vega
 
 export renderer, actionlinks
 export @vl_str, @vlplot, vlplot, @vlfrag, vlfrag
@@ -28,49 +29,6 @@ const vegaliate_app_includes_canvas = ispath(joinpath(vegaliate_app_path, "node_
 
 global vlschema = JSONSchema.Schema(JSON.parsefile(joinpath(vegaliate_app_path, "schemas", "vega-lite-schema.json")))
 
-########################  settings functions  ############################
-
-# Switch for plotting in SVGs or canvas
-
-global RENDERER = :svg
-
-"""
-`renderer()`
-
-show current rendering mode (svg or canvas)
-
-`renderer(::Symbol)`
-
-set rendering mode (svg or canvas)
-"""
-renderer() = RENDERER
-function renderer(m::Symbol)
-  global RENDERER
-  m in [:svg, :canvas] || error("rendering mode should be either :svg or :canvas")
-  RENDERER = m
-end
-
-
-# Switch for showing or not the buttons under the plot
-
-global ACTIONSLINKS = true
-
-"""
-`actionlinks()::Bool`
-
-show if plots will have (true) or not (false) the action links displayed
-
-`actionlinks(::Bool)`
-
-indicate if actions links should be dislpayed under the plot
-"""
-actionlinks() = ACTIONSLINKS
-actionlinks(b::Bool) = (global ACTIONSLINKS ; ACTIONSLINKS = b)
-
-
-########################  includes  #####################################
-include("spec_utils.jl")
-include("vgspec.jl")
 include("vlspec.jl")
 
 include("dsl_vlplot_function/shorthandparser.jl")

@@ -42,14 +42,14 @@ df = DataFrame(a=[1.,2.], b=["A", "B"], c=[Date(2000), Date(2001)])
 
 p1 = getvgplot()
 
-p2 = deletedata(p1)
-@test !haskey(getparams(p2)["data"][1], "values")
+p2 = Vega.deletedata(p1)
+@test !haskey(Vega.getparams(p2)["data"][1], "values")
 
 p3 = p2(df, "table")
 
-@test getparams(p3)["data"][1]["values"][1]["b"] == "A"
+@test Vega.getparams(p3)["data"][1]["values"][1]["b"] == "A"
 
-deletedata!(p1)
+Vega.deletedata!(p1)
 
 @test p1 == p2
 
