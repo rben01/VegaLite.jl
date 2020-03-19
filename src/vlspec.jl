@@ -4,7 +4,7 @@
 #
 ###############################################################################
 
-struct VLSpec <: AbstractVegaSpec
+struct VLSpec <: Vega.AbstractVegaSpec
     params::OrderedDict
 end
 
@@ -14,7 +14,7 @@ function vl_set_spec_data!(specdict, datait)
     specdict["data"] = OrderedDict{String,Any}("values" => recs)
 end
 
-function augment_encoding_type(x::AbstractDict, data::DataValuesNode)
+function augment_encoding_type(x::AbstractDict, data::Vega.DataValuesNode)
     if !haskey(x, "type") && !haskey(x, "aggregate") && haskey(x, "field") && haskey(data.columns, Symbol(x["field"]))
         new_x = copy(x)
 
@@ -39,8 +39,8 @@ function augment_encoding_type(x::AbstractDict, data::DataValuesNode)
 end
 
 function add_encoding_types(specdict, parentdata=nothing)
-    if (haskey(specdict, "data") && haskey(specdict["data"], "values") && specdict["data"]["values"] isa DataValuesNode) || parentdata!==nothing       
-        data = (haskey(specdict, "data") && haskey(specdict["data"], "values") && specdict["data"]["values"] isa DataValuesNode) ? specdict["data"]["values"] : parentdata
+    if (haskey(specdict, "data") && haskey(specdict["data"], "values") && specdict["data"]["values"] isa Vega.DataValuesNode) || parentdata!==nothing       
+        data = (haskey(specdict, "data") && haskey(specdict["data"], "values") && specdict["data"]["values"] isa Vega.DataValuesNode) ? specdict["data"]["values"] : parentdata
 
         newspec = OrderedDict{String,Any}(
             (k=="encoding" && v isa AbstractDict) ? k=>OrderedDict{String,Any}(kk=>augment_encoding_type(vv, data) for (kk,vv) in v) : 
@@ -55,7 +55,7 @@ function add_encoding_types(specdict, parentdata=nothing)
 end
 
 function our_json_print(io, spec::VLSpec)
-    JSON.print(io, add_encoding_types(getparams(spec)))
+    JSON.print(io, add_encoding_types(Vega.getparams(spec)))
 end
 
 function (p::VLSpec)(data)
@@ -63,9 +63,9 @@ function (p::VLSpec)(data)
 
     it = IteratorInterfaceExtensions.getiterator(data)
 
-    datavaluesnode = DataValuesNode(it)
+    datavaluesnode = Vega.DataValuesNode(it)
 
-    new_dict = copy(getparams(p))
+    new_dict = copy(Vega.getparams(p))
 
     new_dict["data"] = OrderedDict{String,Any}("values" => datavaluesnode)
 
@@ -73,14 +73,14 @@ function (p::VLSpec)(data)
 end
 
 function (p::VLSpec)(uri::URI)
-    new_dict = copy(getparams(p))
+    new_dict = copy(Vega.getparams(p))
     new_dict["data"] = OrderedDict{String,Any}("url" => string(uri))
 
     return VLSpec(new_dict)
 end
 
 function (p::VLSpec)(path::AbstractPath)
-    new_dict = copy(getparams(p))
+    new_dict = copy(Vega.getparams(p))
 
     as_uri = string(URI(path))
 
@@ -91,38 +91,38 @@ function (p::VLSpec)(path::AbstractPath)
     return VLSpec(new_dict)
 end
 
-Base.:(==)(x::VLSpec, y::VLSpec) = getparams(x) == getparams(y)
+Base.:(==)(x::VLSpec, y::VLSpec) = Vega.getparams(x) == Vega.getparams(y)
 
 """
-    deletedata!(spec::VLSpec)
+    Vega.deletedata!(spec::VLSpec)
 
-Delete data from `spec` in-place.  See also [`deletedata`](@ref).
+Delete data from `spec` in-place.  See also [`Vega.deletedata`](@ref).
 """
-function deletedata!(spec::VLSpec)
-    delete!(getparams(spec), "data")
+function Vega.deletedata!(spec::VLSpec)
+    delete!(Vega.getparams(spec), "data")
     return spec
 end
 
 """
-    deletedata(spec::VLSpec)
+    Vega.deletedata(spec::VLSpec)
 
-Create a copy of `spec` without data.  See also [`deletedata!`](@ref).
+Create a copy of `spec` without data.  See also [`Vega.deletedata!`](@ref).
 """
-deletedata(spec::VLSpec) = deletedata!(copy(spec))
+Vega.deletedata(spec::VLSpec) = Vega.deletedata!(copy(spec))
 
 function Base.:+(a::VLSpec, b::VLSpec)
-    new_spec = deepcopy(getparams(a))
+    new_spec = deepcopy(Vega.getparams(a))
     if haskey(new_spec, "facet") || haskey(new_spec, "repeat")
-        new_spec["spec"] = deepcopy(getparams(b))
-    elseif haskey(getparams(b), "vconcat")
-        new_spec["vconcat"] = deepcopy(getparams(b)["vconcat"])
-    elseif haskey(getparams(b), "hconcat")
-        new_spec["hconcat"] = deepcopy(getparams(b)["hconcat"])
+        new_spec["spec"] = deepcopy(Vega.getparams(b))
+    elseif haskey(Vega.getparams(b), "vconcat")
+        new_spec["vconcat"] = deepcopy(Vega.getparams(b)["vconcat"])
+    elseif haskey(Vega.getparams(b), "hconcat")
+        new_spec["hconcat"] = deepcopy(Vega.getparams(b)["hconcat"])
     else
         if !haskey(new_spec,"layer")
             new_spec["layer"] = []
         end
-        push!(new_spec["layer"], deepcopy(getparams(b)))
+        push!(new_spec["layer"], deepcopy(Vega.getparams(b)))
     end
 
     return VLSpec(new_spec)
@@ -130,18 +130,18 @@ end
 
 function Base.hcat(A::VLSpec...)
     spec = VLSpec(OrderedDict{String,Any}())
-    getparams(spec)["hconcat"] = []
+    Vega.getparams(spec)["hconcat"] = []
     for i in A
-        push!(getparams(spec)["hconcat"], deepcopy(getparams(i)))
+        push!(Vega.getparams(spec)["hconcat"], deepcopy(Vega.getparams(i)))
     end
     return spec
 end
 
 function Base.vcat(A::VLSpec...)
   spec = VLSpec(OrderedDict{String,Any}())
-  getparams(spec)["vconcat"] = []
+  Vega.getparams(spec)["vconcat"] = []
   for i in A
-      push!(getparams(spec)["vconcat"], deepcopy(getparams(i)))
+      push!(Vega.getparams(spec)["vconcat"], deepcopy(Vega.getparams(i)))
   end
   return spec
 end
