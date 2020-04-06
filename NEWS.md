@@ -1,3 +1,6 @@
+# VegaLite.jl v2.1.0 Release Notes
+* Update to vega-lite 4.10.0 and vega 5.10.1
+
 # VegaLite.jl v2.0.0 Release Notes
 * Update to vega-lite 4.5.1 and vega 5.9.2
 * Many more examples in the documentation
