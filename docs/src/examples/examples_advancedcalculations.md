@@ -355,10 +355,7 @@ Top-K plot with \"others\" by Trevor Manz, adapted from https://observablehq.com
 ## Using the lookup transform to combine data
 
 ```@example
-using VegaLite, VegaDatasets, DataFrames, CSV
-
-lookup_people_file=replace(joinpath(dirname(pathof(VegaDatasets)),"..","data","data","lookup_people.csv"),"\\" => "/")
-lookup_people=CSV.read(lookup_people_file)
+using VegaLite, VegaDatasets
 
 dataset("lookup_groups") |>
 @vlplot(
@@ -366,7 +363,7 @@ dataset("lookup_groups") |>
         {
             lookup="person",
             from={
-                data=lookup_people,
+                data=dataset("lookup_people"),
                 key="name",
                 fields=["age","height"]
             }
