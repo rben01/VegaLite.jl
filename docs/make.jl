@@ -30,6 +30,7 @@ makedocs(
             "Line Charts" => "examples/examples_line_charts.md",
             "Area Charts & Streamgraphs" => "examples/examples_area_Charts_streamgraphs.md",
             "Table-based Plots" => "examples/examples_table_based_plots.md",
+            "Circular Plots" => "examples/examples_circular_plots.md",
             "Advanced Calculations" => "examples/examples_advancedcalculations.md"
         ],
         "Composite Mark" => Any[
