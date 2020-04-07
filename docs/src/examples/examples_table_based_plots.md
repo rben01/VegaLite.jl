@@ -271,14 +271,19 @@ dataset("cars") |>
 ]
 ```
 
+## Wind Vector Map
 
+```@example
+using VegaLite, VegaDatasets
 
-
-
-
-
-
-
-
-
-
+dataset("windvectors") |>
+@vlplot(
+    mark={:point, shape=:wedge},
+    x={"longitude:o", axis=nothing},
+    y={"latitude:o", axis=nothing},
+    color={"dir:q", scale={domain=[0,360], scheme=:rainbow},legend=nothing},
+    angle={"dir:q", scale={domain=[0,360], range=[180, 540]}},
+    size="speed:q",
+    config={view={step=10, fill=:black}}
+)
+```
