@@ -42,8 +42,8 @@ function writehtml_full(io::IO, spec::VLSpec; title="VegaLite plot")
 
       var opt = {
         mode: "vega-lite",
-        renderer: "$RENDERER",
-        actions: $ACTIONSLINKS
+        renderer: "$(Vega.RENDERER)",
+        actions: $(Vega.ACTIONSLINKS)
       }
 
       var spec = """)
@@ -121,8 +121,8 @@ function writehtml_partial(io::IO, spec::String; title="VegaLite plot")
 
       var opt = {
         mode: "vega-lite",
-        renderer: "$RENDERER",
-        actions: $ACTIONSLINKS
+        renderer: "$(Vega.RENDERER)",
+        actions: $(Vega.ACTIONSLINKS)
       }
 
       vg_embed("#$divid", spec, opt);
