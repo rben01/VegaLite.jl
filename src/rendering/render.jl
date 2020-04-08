@@ -138,5 +138,5 @@ end
 function Base.display(d::REPL.REPLDisplay, plt::VLSpec)
   # checkplot(plt)
   tmppath = writehtml_full(plt)
-  launch_browser(tmppath) # Open the browser
+  Vega.launch_browser(tmppath) # Open the browser
 end
