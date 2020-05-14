@@ -177,6 +177,28 @@ dataset("movies") |>
 )
 ```
 
+## Violin Plot
+```@example
+using VegaLite, VegaDatasets
+
+dataset("cars") |> @vlplot(
+    mark={:area, orient="horizontal"},
+    transform=[
+        {density="Miles_per_Gallon", groupby=["Origin"], extent=[5, 50],
+        as=["Miles_per_Gallon", "density"]}
+    ],
+    y="Miles_per_Gallon:q",
+    x= {"density:q", stack="center", impute=nothing, title=nothing,
+        axis={labels=false, values=[0], grid=false, ticks=true}},
+    column={"Origin:n", header={titleOrient="bottom", labelOrient="bottom",
+            labelPadding=0}},
+    color = "Origin:n",
+    width=70,
+    spacing=0,
+    config={view={stroke=nothing}}
+)
+```
+
 ## Wilkinson Dot Plot
 
 ```@example
