@@ -70,3 +70,15 @@ Save the plot ``v`` as a eps file with name ``filename``.
 function eps(filename::AbstractString, v::VLSpec)
     savefig(filename, "application/eps", v)
 end
+
+function Vega.savespec(io::IO, v::VLSpec; include_data=false, indent=nothing)
+    output_dict = copy(Vega.getparams(v))
+    if !include_data
+        delete!(output_dict, "data")
+    end
+    if indent === nothing
+        JSON.print(io, output_dict)
+    else
+        JSON.print(io, output_dict, indent)
+    end
+end

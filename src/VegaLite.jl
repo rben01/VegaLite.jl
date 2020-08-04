@@ -17,6 +17,7 @@ using Pkg.Artifacts
 using DataStructures
 import TableTraitsUtils
 using Vega
+import Base64
 
 export renderer, actionlinks
 export @vl_str, @vlplot, vlplot, @vlfrag, vlfrag
