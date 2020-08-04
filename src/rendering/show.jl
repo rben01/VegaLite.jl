@@ -122,3 +122,7 @@ end
 function Base.show(io::IO, m::MIME"application/prs.juno.plotpane+html", v::VLSpec)
     writehtml_full(io, v)
 end
+
+function Base.show(io::IO, m::MIME"text/html", v::VLSpec)
+    writehtml_partial_script(io, v)
+end

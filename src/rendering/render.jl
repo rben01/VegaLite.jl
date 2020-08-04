@@ -75,7 +75,7 @@ Creates a HTML script + div block for showing the plot (typically for IJulia).
 VegaLite js files are loaded from the web (to accommodate the security model of
 IJulia) using requirejs.
 """
-function writehtml_partial(io::IO, spec::String; title="VegaLite plot")
+function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
   divid = "vg" * randstring(3)
 
   println(io,
@@ -132,6 +132,43 @@ function writehtml_partial(io::IO, spec::String; title="VegaLite plot")
     </script>
 
   </html>
+  """)
+end
+
+"""
+Creates a HTML script + div block for showing the plot (typically for Pluto).
+VegaLite js files are loaded from the web using script tags.
+"""
+function writehtml_partial_script(io::IO, spec::VLSpec; title="VegaLite plot")
+  divid = "vg" * randstring(3)
+  print(io, """
+    <style media="screen">
+      .vega-actions a {
+        margin-right: 10px;
+        font-family: sans-serif;
+        font-size: x-small;
+        font-style: italic;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <div id="$divid"></div>
+
+    <script>
+      var spec = """)
+  our_json_print(io, spec)
+  print(io,"""
+      ;
+      var opt = {
+        mode: "vega-lite",
+        renderer: "$(Vega.RENDERER)",
+        actions: $(Vega.ACTIONSLINKS)
+      };
+      vegaEmbed("#$divid", spec, opt);
+    </script>
   """)
 end
 
