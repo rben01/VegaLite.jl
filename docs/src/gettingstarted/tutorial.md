@@ -308,3 +308,62 @@ save("myplot.pdf")
 ## Next steps
 
 There are two main sources of information if you want to learn more about plotting with [VegaLite.jl](https://github.com/queryverse/VegaLite.jl). The first is the excellent [Vega-Lite documentation](https://vega.github.io/vega-lite/). The documentation describes the JSON original Vega-Lite version, but it should be fairly easy to understand how those examples translate into the Julia equivalent. The second source are the remaining sections in this documentation of [VegaLite.jl](https://github.com/queryverse/VegaLite.jl). The section about the `@vlplot` macro should be especially useful for understanding how the JSON Vega-Lite syntax can be translated into the equivalent Julia version.
+
+### Moving from Vega-Lite Examples to Julia
+
+Vega-Lite has a rich [gallery of examples](https://vega.github.io/vega-lite/examples/) that often make a great starting point for developing visualizations.  However, editing JSON and integrating it with Julia is not the simplest workflow.  To translate a JSON specification to `@vlplot` syntax, do the following.
+
+```julia
+using VegaLite, Vega
+
+spec = vl"""{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "description": "A simple bar chart with embedded data.",
+  "data": {
+    "values": [
+      {"a": "A", "b": 28}, {"a": "B", "b": 55}, {"a": "C", "b": 43},
+      {"a": "D", "b": 91}, {"a": "E", "b": 81}, {"a": "F", "b": 53},
+      {"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}
+    ]
+  },
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "a", "type": "nominal", "axis": {"labelAngle": 0}},
+    "y": {"field": "b", "type": "quantitative"}
+  }
+}""";
+
+# outputs the code as a string so then be copied/pasted and edited
+code_str = sprint(Vega.printrepr, spec)
+
+#=
+code_str now contains:
+"@vlplot(\$schema=\"https://vega.github.io/schema/vega-lite/v4.json\",encoding={x={axis={labelAngle=0},field=\"a\",type=\"nominal\"},y={field=\"b\",type=\"quantitative\"}},mark=\"bar\",description=\"A simple bar chart with embedded data.\")"
+=#
+
+# prints the code to stdout more prettily and without the data so then can be copied/pasted
+# and edited and new data piped in from a table
+Vega.printrepr(stdout, spec, indent=true, include_data=false)
+
+#=
+Result
+@vlplot(
+ $schema="https://vega.github.io/schema/vega-lite/v4.json",
+ encoding={
+  x={
+   axis={
+    labelAngle=0
+   },
+   field="a",
+   type="nominal"
+  },
+  y={
+   field="b",
+   type="quantitative"
+  }
+ },
+ mark="bar",
+ description="A simple bar chart with embedded data."
+)
+=#
+```
