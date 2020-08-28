@@ -1,5 +1,9 @@
 module VegaLite
 
+if isdefined(Base, :Experimental) && isdefined(Base.Experimental, Symbol("@optlevel"))
+    @eval Base.Experimental.@optlevel 0
+end
+
 using JSON, NodeJS # 6s
 import IteratorInterfaceExtensions # 1s
 import TableTraits # 0
