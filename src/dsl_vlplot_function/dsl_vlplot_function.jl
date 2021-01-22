@@ -4,7 +4,7 @@ struct VLFrag <: Vega.AbstractVegaFragment
 end
 
 function vlfrag(args...; kwargs...)
-    return VLFrag(Any[args...], OrderedDict{String,Any}(string(k)=>convert_nt_to_dict(v, VLFrag) for (k,v) in kwargs))
+    return VLFrag(Any[args...], OrderedDict{String,Any}(string(k)=>Vega.convert_nt_to_dict(v, VLFrag) for (k,v) in kwargs))
 end
 
 fix_shortcut_level_mark(spec_frag) = spec_frag
