@@ -36,27 +36,30 @@ function decode_typ(s::AbstractString)
     elseif s=="t"
         s="temporal"
     end
-
-    if s in union(vlschema.data["definitions"]["StandardType"]["enum"], vlschema.data["definitions"]["TypeForShape"]["enum"])
-        return "type"=>s
-    else
-        throw(ArgumentError("Invalid type."))
+    for key in ("StandardType", "TypeForShape")
+        if s in vlschema["definitions"][key]["enum"]
+            return "type" => s
+        end
     end
+    throw(ArgumentError("Invalid type."))
 end
 
 function decode_func(s::AbstractString)
     s = lowercase(s)
-    if s in vlschema.data["definitions"]["AggregateOp"]["enum"]
-        return "aggregate"=>s
-    elseif s in union(
-                vlschema.data["definitions"]["LocalMultiTimeUnit"]["enum"],
-                vlschema.data["definitions"]["LocalSingleTimeUnit"]["enum"],
-                vlschema.data["definitions"]["UtcMultiTimeUnit"]["enum"],
-                vlschema.data["definitions"]["UtcSingleTimeUnit"]["enum"])
-        return "timeUnit"=>s
-    else
-        throw(ArgumentError("Unknown aggregation function or time unit '$s'."))
+    if s in vlschema["definitions"]["AggregateOp"]["enum"]
+        return "aggregate" => s
     end
+    for key in (
+        "LocalMultiTimeUnit",
+        "LocalSingleTimeUnit",
+        "UtcMultiTimeUnit",
+        "UtcSingleTimeUnit",
+    )
+        if s in vlschema["definitions"][key]["enum"]
+            return "timeUnit" => s
+        end
+    end
+    throw(ArgumentError("Unknown aggregation function or time unit '$s'."))
 end
 
 function parse_shortcut(s::AbstractString)
