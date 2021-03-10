@@ -42,3 +42,7 @@ To install [VegaLite.jl](https://github.com/queryverse/VegaLite.jl), run the fol
 ## Documentation
 
 The current documentation can be found [here](https://queryverse.github.io/VegaLite.jl/stable).
+
+## Developer Notes
+
+Jupyterlab support depends on Juperlab's built-in renderer; before updating to a new major version of vega-lite, check the [jupyterlab project](https://github.com/jupyterlab/jupyterlab/blob/master/packages/vega5-extension/package.json#L42) for the latest supported version of vega-lite.
