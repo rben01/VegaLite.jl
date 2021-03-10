@@ -32,7 +32,7 @@ vlp = getvlplot()
         @test Vega.getparams(include_string(@__MODULE__, code)) == Vega.getparams(plt)
     end
 end
-
+   
 Base.Filesystem.mktempdir() do folder
     VegaLite.svg(joinpath(folder,"test1.svg"), p)
     @test isfile(joinpath(folder,"test1.svg"))
@@ -103,6 +103,8 @@ Base.Filesystem.mktempdir() do folder
     vgpl2 = VegaLite.Vega.loadvgspec(joinpath(folder,"test1.vega"))
 
     @test vgpl1 == vgpl1
+
+    @test_broken p |> save("testfile.png")
 
     # TODO Enable once FileIO stuff is merged
     # save(joinpath(folder,"test3.vega"), vgpl1)
