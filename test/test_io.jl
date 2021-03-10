@@ -17,15 +17,15 @@ vlp = getvlplot()
 ],
     indent in [nothing, 4]
 
-    let json = sprint(io -> save(Stream(fmt, io), plt, indent=indent)),
+    let json = sprint(io -> save(Stream{fmt}(io), plt, indent=indent)),
         code = "vg\"\"\"$json\"\"\""
         @test Vega.getparams(include_string(@__MODULE__, code)) == Vega.getparams(plt)
     end
 
     let io = IOBuffer()
-        save(Stream(fmt, io), plt, indent=indent)
+        save(Stream{fmt}(io), plt, indent=indent)
         seek(io, 0)
-        @test Vega.getparams(load(Stream(fmt, io))) == Vega.getparams(plt)
+        @test Vega.getparams(load(Stream{fmt}(io))) == Vega.getparams(plt)
     end
 
     let code = repr("text/plain", plt, context=:compact=>false)
