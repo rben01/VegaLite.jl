@@ -10,7 +10,6 @@ using URIParser
 using FilePaths
 using REPL, Dates
 using Random
-using Setfield: Setfield, PropertyLens, @lens, @set
 # import Cairo, Rsvg
 using Pkg.Artifacts
 using DataStructures
