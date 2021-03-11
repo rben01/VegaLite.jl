@@ -104,4 +104,19 @@ using Test
 }
 """
 
+@testset "Test using outside variables in vlplot spec" begin
+    color_bar1 = "green"
+    @test @vlplot(
+        x = :x,
+        y = :y,
+        mark = {type = :circle},
+        color = {field = :z, type = "nominal", scale = {range = [color_bar1, "blue"]}}
+    ) == @vlplot(
+        x = :x,
+        y = :y,
+        mark = {type = :circle},
+        color = {field = :z, type = "nominal", scale = {range = ["green", "blue"]}}
+    )
+end
+
 end
