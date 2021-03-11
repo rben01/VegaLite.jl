@@ -43,6 +43,12 @@ To install [VegaLite.jl](https://github.com/queryverse/VegaLite.jl), run the fol
 
 The current documentation can be found [here](https://queryverse.github.io/VegaLite.jl/stable).
 
+## Note for Jupyterlab Users
+
+[VegaLite.jl](https://github.com/queryverse/VegaLite.jl) can be used in combination with many different front end clients including [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/), [Pluto.jl](https://github.com/fonsp/Pluto.jl), and [Julia for VSCode](https://www.julia-vscode.org).
+
+**Important:** [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) supplies its own version of [Vega-Lite](https://vega.github.io/vega-lite/) and *cannot* be kept in perfect sync with [VegaLite.jl](https://github.com/queryverse/VegaLite.jl). Formatting discrepancies **can** and **will** arise on occasion for [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/) users. [VegaLite.jl](https://github.com/queryverse/VegaLite.jl) targets the latest available minor release of [Vega-Lite](https://vega.github.io/vega-lite/) which is also supported by [JupyterLab](https://jupyterlab.readthedocs.io/en/stable/).
+
 ## Developer Notes
 
-Jupyterlab support depends on Juperlab's built-in renderer; before updating to a new major version of vega-lite, check the [jupyterlab project](https://github.com/jupyterlab/jupyterlab/blob/master/packages/vega5-extension/package.json#L42) for the latest supported version of vega-lite.
+JupyterLab support depends on Juperlab's built-in renderer; before updating to a new major version of vega-lite, check the [JupyterLab project](https://github.com/jupyterlab/jupyterlab/blob/master/packages/vega5-extension/package.json#L42) for the latest supported version of vega-lite.
