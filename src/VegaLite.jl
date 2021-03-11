@@ -14,8 +14,6 @@ using URIParser
 using FilePaths
 using REPL, Dates
 using Random
-import JSONSchema
-using Setfield: Setfield, PropertyLens, @lens, @set
 # import Cairo, Rsvg
 using Pkg.Artifacts
 using DataStructures
@@ -32,7 +30,9 @@ export deletedata, deletedata!
 const vegaliate_app_path = artifact"vegalite_app"
 const vegaliate_app_includes_canvas = ispath(joinpath(vegaliate_app_path, "node_modules", "canvas"))
 
-global vlschema = JSONSchema.Schema(JSON.parsefile(joinpath(vegaliate_app_path, "schemas", "vega-lite-schema.json")))
+const vlschema = JSON.parsefile(
+    joinpath(vegaliate_app_path, "schemas", "vega-lite-schema.json")
+)
 
 include("vlspec.jl")
 

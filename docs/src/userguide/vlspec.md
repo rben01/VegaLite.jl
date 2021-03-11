@@ -104,6 +104,8 @@ The resulting `VLSpec` object is indistinguishable from one that is created via 
 
 The main benefit of this approach is that one can directly leverage JSON vega-lite examples and code.
 
+**NOTE:** A JSON spec can be shown in the `@vlplot` style using `Vega.printrepr` - see "Next Steps" in the tutorial for an example.
+
 ## Manipulating `VLSpec` object directly
 
 Vega-Lite properties can be directly accessed as properties of the `VLSpec` object.

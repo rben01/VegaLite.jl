@@ -185,11 +185,9 @@ data |>
 ## Carbon Dioxide in the Atmosphere
 
 ```@example
-using VegaLite, VegaDatasets, DataFrames
+using VegaLite, VegaDatasets
 
-data=readtable(string(dataset("co2-concentration").path))
-
-data |> @vlplot(
+dataset("co2-concentration") |> @vlplot(
     width=800,
     height=500,
     transform=[
