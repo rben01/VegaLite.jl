@@ -13,7 +13,6 @@ vlp = getvlplot()
 
 @testset "$fmt (indent=$(repr(indent)))" for (fmt, plt) in [
     (format"vegalite", vlp)
-    # (format"vega", vgp)  # waiting for FileIO
 ],
     indent in [nothing, 4]
 
@@ -43,9 +42,6 @@ Base.Filesystem.mktempdir() do folder
     VegaLite.png(joinpath(folder, "test1.png"), p)
     @test isfile(joinpath(folder, "test1.png"))
 
-    # VegaLite.eps(joinpath(folder,"test1.eps"), p)
-    # @test isfile(joinpath(folder,"test1.eps"))
-
     VegaLite.savefig(joinpath(folder, "test2.svg"), p)
     @test isfile(joinpath(folder, "test2.svg"))
 
@@ -54,9 +50,6 @@ Base.Filesystem.mktempdir() do folder
 
     VegaLite.savefig(joinpath(folder, "test2.png"), p)
     @test isfile(joinpath(folder, "test2.png"))
-
-    # VegaLite.savefig(joinpath(folder,"test2.eps"), p)
-    # @test isfile(joinpath(folder,"test2.eps"))
 
     save(joinpath(folder, "test3.svg"), p)
     @test isfile(joinpath(folder, "test3.svg"))
@@ -67,9 +60,6 @@ Base.Filesystem.mktempdir() do folder
     save(joinpath(folder, "test3.png"), p)
     @test isfile(joinpath(folder, "test3.png"))
 
-    # save(joinpath(folder,"test2.eps"), p)
-    # @test isfile(joinpath(folder,"test2.eps"))
-
     save(joinpath(folder, "test4.svg"), vgp)
     @test isfile(joinpath(folder, "test4.svg"))
 
@@ -78,9 +68,6 @@ Base.Filesystem.mktempdir() do folder
 
     save(joinpath(folder, "test4.png"), vgp)
     @test isfile(joinpath(folder, "test4.png"))
-
-    # save(joinpath(folder,"test4.eps"), vgp)
-    # @test isfile(joinpath(folder,"test4.eps"))
 
     Vega.savespec(joinpath(folder, "test1.vegalite"), p)
     @test isfile(joinpath(folder, "test1.vegalite"))
@@ -105,16 +92,6 @@ Base.Filesystem.mktempdir() do folder
     @test vgpl1 == vgpl1
 
     @test_broken p |> save("testfile.png")
-
-    # TODO Enable once FileIO stuff is merged
-    # save(joinpath(folder,"test3.vega"), vgpl1)
-    # @test isfile(joinpath(folder,"test3.vega"))
-
-    # vgpl3 = load(joinpath(folder,"test3.vega"))
-    # @test isa(vgpl2, Vega.VGSpec)
-
-    # save(joinpath(folder,"test4.vega"), vgpl1, include_data=true)
-    # @test isfile(joinpath(folder,"test4.vega"))
 
 end
 
