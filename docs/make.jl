@@ -45,7 +45,9 @@ makedocs(
     ],
     "Reference Manual" => [
         "Global settings" => "referencemanual/global.md",
-        "Outputs" => "referencemanual/output.md"]
+        "Outputs" => "referencemanual/output.md",
+        "Performance tips" => "referencemanual/performance.md",
+        ]
   ]
 )
 
