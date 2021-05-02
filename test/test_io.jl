@@ -69,6 +69,24 @@ Base.Filesystem.mktempdir() do folder
     save(joinpath(folder, "test4.png"), vgp)
     @test isfile(joinpath(folder, "test4.png"))
 
+    p |> save(joinpath(folder, "test5.svg"))
+    @test isfile(joinpath(folder, "test5.svg"))
+
+    p |> save(joinpath(folder, "test5.pdf"))
+    @test isfile(joinpath(folder, "test5.pdf"))
+
+    p |> save(joinpath(folder, "test5.png"))
+    @test isfile(joinpath(folder, "test5.png"))
+
+    vgp |> save(joinpath(folder, "test6.svg"))
+    @test isfile(joinpath(folder, "test6.svg"))
+
+    vgp |> save(joinpath(folder, "test6.pdf"))
+    @test isfile(joinpath(folder, "test6.pdf"))
+
+    vgp |> save(joinpath(folder, "test6.png"))
+    @test isfile(joinpath(folder, "test6.png"))
+
     Vega.savespec(joinpath(folder, "test1.vegalite"), p)
     @test isfile(joinpath(folder, "test1.vegalite"))
 
@@ -90,9 +108,6 @@ Base.Filesystem.mktempdir() do folder
     vgpl2 = VegaLite.Vega.loadvgspec(joinpath(folder, "test1.vega"))
 
     @test vgpl1 == vgpl1
-
-    @test_broken p |> save("testfile.png")
-
 end
 
 end
