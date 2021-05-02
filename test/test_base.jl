@@ -4,7 +4,6 @@ using VegaLite:Vega.getparams
 
 @testset "base" begin
 
-equiv(a::VegaLite.VLSpec, b::VegaLite.VLSpec) = false
 equiv(a::VegaLite.VLSpec, b::VegaLite.VLSpec) =
   ==(Vega.getparams(a), Vega.getparams(b))
 
