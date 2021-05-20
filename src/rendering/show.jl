@@ -64,7 +64,7 @@ function Base.show(io::IO, m::MIME"image/svg+xml", v::VLSpec)
 end
 
 function Base.show(io::IO, m::MIME"application/pdf", v::VLSpec)
-    if vegaliate_app_includes_canvas
+    if vegaliate_app_includes_canvas[]
         print(io, convert_vl_to_x(v, "vg2pdf"))
     else
         error("Not yet implemented.")
@@ -99,7 +99,7 @@ end
 # end
 
 function Base.show(io::IO, m::MIME"image/png", v::VLSpec)
-    if vegaliate_app_includes_canvas
+    if vegaliate_app_includes_canvas[]
         print(io, convert_vl_to_x(v, "vg2png"))
     else
         error("Not yet implemented.")
