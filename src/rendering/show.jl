@@ -3,16 +3,17 @@ function _convert_vl_with_cmds(v::VLSpec, cmds...)
     our_json_print(in_buf, v)
     seekstart(in_buf)
 
-    out_buf = IOBuffer()
-
-    p = open(pipeline(in_buf, cmds..., out_buf))
+    p = open(pipeline(in_buf, cmds...))
+    reader = @async read(p, String)
     wait(p)
 
-    res = String(take!(out_buf))
     if any(proc -> proc.exitcode != 0, p.processes)
         # Is "Invalid spec" the only possible cause of failure?
         throw(ArgumentError("Invalid spec"))
     end
+
+    res = fetch(reader)
+
     return res
 end
 
