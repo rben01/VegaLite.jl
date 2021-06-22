@@ -70,6 +70,8 @@ function writehtml_full(spec::VLSpec; title="VegaLite plot")
     tmppath
 end
 
+const cdn_versions = (vg="5.6.0", vl="3.4.0", vg_embed="5.1.2")
+
 """
 Creates a HTML script + div block for showing the plot (typically for IJulia).
 VegaLite js files are loaded from the web (to accommodate the security model of
@@ -99,9 +101,9 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
 
     requirejs.config({
         paths: {
-          vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/5.6.0/vega.min.js?noext",
-          vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/3.4.0/vega-lite.min.js?noext",
-          vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.2/vega-embed.min.js?noext"
+          vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/$(cdn_versions.vg)/vega.min.js?noext",
+          vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/$(cdn_versions.vl)/vega-lite.min.js?noext",
+          vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/$(cdn_versions.vg_embed)/vega-embed.min.js?noext"
         },
         shim: {
           vg_embed: {deps: ["vg.global", "vl.global"]},
@@ -152,9 +154,9 @@ function writehtml_partial_script(io::IO, spec::VLSpec; title="VegaLite plot")
       }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@$(cdn_versions.vg)"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@$(cdn_versions.vl)"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@$(cdn_versions.vg_embed)"></script>
 
     <div id="$divid"></div>
 
