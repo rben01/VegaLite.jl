@@ -70,15 +70,12 @@ function writehtml_full(spec::VLSpec; title="VegaLite plot")
     tmppath
 end
 
-# TODO: how to auto generate versions from artifacts
-const cdn_versions = (vg="5.6.0", vl="3.4.0", vg_embed="5.1.2")
 
 """
 Creates a HTML script + div block for showing the plot (typically for IJulia).
 VegaLite js files are loaded from the web (to accommodate the security model of
 IJulia) using requirejs.
 """
-
 function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
   divid = "vg" * randstring(3)
 
@@ -102,9 +99,9 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
 
     requirejs.config({
         paths: {
-        vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/5.6.0/vega.min.js?noext",
-        vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/3.4.0/vega-lite.min.js?noext",
-        vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.2/vega-embed.min.js?noext"
+            vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/5.6.0/vega.min.js?noext",
+            vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/3.4.0/vega-lite.min.js?noext",
+            vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.2/vega-embed.min.js?noext"
         },
         shim: {
           vg_embed: {deps: ["vg.global", "vl.global"]},
