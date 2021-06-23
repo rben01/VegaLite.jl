@@ -24,6 +24,8 @@ vg = Vega.VGSpec(Dict{String,Any}())
 
 @test sprint(show, "application/vnd.vega.v5+json", vg"{}") == "{}"
 
-@test occursin("var spec = {}", sprint(show, "text/html", @vlplot()))
+@test !showable(MIME("text/html"), vl)
+
+@test occursin("var spec = {\"mark\":\"point\"}", sprint(show, "text/html",vl))
 
 end

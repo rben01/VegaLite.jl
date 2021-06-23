@@ -70,6 +70,7 @@ function writehtml_full(spec::VLSpec; title="VegaLite plot")
     tmppath
 end
 
+# TODO: how to auto generate versions from artifacts
 const cdn_versions = (vg="5.6.0", vl="3.4.0", vg_embed="5.1.2")
 
 """
@@ -101,9 +102,9 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
 
     requirejs.config({
         paths: {
-          vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/$(cdn_versions.vg)/vega.min.js?noext",
-          vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/$(cdn_versions.vl)/vega-lite.min.js?noext",
-          vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/$(cdn_versions.vg_embed)/vega-embed.min.js?noext"
+        vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/5.6.0/vega.min.js?noext",
+        vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/3.4.0/vega-lite.min.js?noext",
+        vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.2/vega-embed.min.js?noext"
         },
         shim: {
           vg_embed: {deps: ["vg.global", "vl.global"]},
@@ -138,6 +139,12 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
   """)
 end
 
+# read in the artifact asset, removing the source map comment
+function read_asset(url)
+    rawVal = read(asset(url), String)
+    return split(rawVal, "//# sourceMappingURL=")[1]
+end
+
 """
 Creates a HTML script + div block for showing the plot (typically for Pluto).
 VegaLite js files are loaded from the web using script tags.
@@ -154,9 +161,9 @@ function writehtml_partial_script(io::IO, spec::VLSpec; title="VegaLite plot")
       }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/vega@$(cdn_versions.vg)"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@$(cdn_versions.vl)"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@$(cdn_versions.vg_embed)"></script>
+    <script>$(read_asset("vega.min.js"))</script>
+    <script>$(read_asset("vega-lite.min.js"))</script>
+    <script>$(read_asset("vega-embed.min.js"))</script>
 
     <div id="$divid"></div>
 
