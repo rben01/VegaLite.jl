@@ -3,8 +3,14 @@
 #     Rendering
 #
 ######################################################################
+using JSON
 
 asset(url...) = normpath(joinpath(vegaliate_app_path, "minified", url...))
+
+package_json = JSON.parsefile(joinpath(vegaliate_app_path, "package.json"))
+vega_version = package_json["dependencies"]["vega"]
+vegalite_version = package_json["dependencies"]["vega-lite"]
+vegaembed_version = package_json["dependencies"]["vega-embed"]
 
 # Vega Scaffold: https://github.com/vega/vega/wiki/Runtime
 
@@ -99,9 +105,9 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
 
     requirejs.config({
         paths: {
-            vg: "https://cdnjs.cloudflare.com/ajax/libs/vega/5.6.0/vega.min.js?noext",
-            vl: "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/3.4.0/vega-lite.min.js?noext",
-            vg_embed: "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/5.1.2/vega-embed.min.js?noext"
+            vg: "https://cdn.jsdelivr.net/npm/vega@$(vega_version)/build/vega.min.js",
+            vl: "https://cdn.jsdelivr.net/npm/vega-lite@$(vegalite_version)/build/vega-lite.min.js",
+            vg_embed: "https://cdn.jsdelivr.net/npm/vega-embed@$(vegaembed_version)/build/vega-embed.min.js"
         },
         shim: {
           vg_embed: {deps: ["vg.global", "vl.global"]},
@@ -136,12 +142,6 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
   """)
 end
 
-# read in the artifact asset, removing the source map comment
-function read_asset(url)
-    rawVal = read(asset(url), String)
-    return split(rawVal, "//# sourceMappingURL=")[1]
-end
-
 """
 Creates a HTML script + div block for showing the plot (typically for Pluto).
 VegaLite js files are loaded from the web using script tags.
@@ -158,9 +158,9 @@ function writehtml_partial_script(io::IO, spec::VLSpec; title="VegaLite plot")
       }
     </style>
 
-    <script>$(read_asset("vega.min.js"))</script>
-    <script>$(read_asset("vega-lite.min.js"))</script>
-    <script>$(read_asset("vega-embed.min.js"))</script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@$(vega_version)/build/vega.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@$(vegalite_version)/build/vega-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@$(vegaembed_version)/build/vega-embed.min.js"></script>
 
     <div id="$divid"></div>
 
