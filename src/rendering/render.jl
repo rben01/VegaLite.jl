@@ -8,9 +8,7 @@ using JSON
 asset(url...) = normpath(joinpath(vegaliate_app_path, "minified", url...))
 
 package_json = JSON.parsefile(joinpath(vegaliate_app_path, "package.json"))
-vega_version = package_json["dependencies"]["vega"]
-vegalite_version = package_json["dependencies"]["vega-lite"]
-vegaembed_version = package_json["dependencies"]["vega-embed"]
+version(package) = package_json["dependencies"][package]
 
 # Vega Scaffold: https://github.com/vega/vega/wiki/Runtime
 
@@ -105,9 +103,9 @@ function writehtml_partial_require(io::IO, spec::String; title="VegaLite plot")
 
     requirejs.config({
         paths: {
-            vg: "https://cdn.jsdelivr.net/npm/vega@$(vega_version)/build/vega.min.js",
-            vl: "https://cdn.jsdelivr.net/npm/vega-lite@$(vegalite_version)/build/vega-lite.min.js",
-            vg_embed: "https://cdn.jsdelivr.net/npm/vega-embed@$(vegaembed_version)/build/vega-embed.min.js"
+            vg: "https://cdn.jsdelivr.net/npm/vega@$(version("vega"))/build/vega.min.js",
+            vl: "https://cdn.jsdelivr.net/npm/vega-lite@$(version("vega-lite"))/build/vega-lite.min.js",
+            vg_embed: "https://cdn.jsdelivr.net/npm/vega-embed@$(version("vega-embed"))/build/vega-embed.min.js"
         },
         shim: {
           vg_embed: {deps: ["vg.global", "vl.global"]},
@@ -158,9 +156,9 @@ function writehtml_partial_script(io::IO, spec::VLSpec; title="VegaLite plot")
       }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/vega@$(vega_version)/build/vega.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@$(vegalite_version)/build/vega-lite.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@$(vegaembed_version)/build/vega-embed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@$(version("vega"))/build/vega.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@$(version("vega-lite"))/build/vega-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@$(version("vega-embed"))/build/vega-embed.min.js"></script>
 
     <div id="$divid"></div>
 
