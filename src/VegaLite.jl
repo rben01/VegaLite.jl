@@ -33,9 +33,9 @@ const vegaliate_app_includes_canvas = Ref{Bool}()
 const vlschema = Ref{Dict{String, Any}}()
 
 function __init__()
-    vegaliate_app_includes_canvas[] = ispath(vegaliate_app_path("node_modules", "canvas"))
+    vegaliate_app_includes_canvas[] = ispath(vegalite_app_path("node_modules", "canvas"))
     vlschema[] = JSON.parsefile(
-        vegaliate_app_path("schemas", "vega-lite-schema.json")
+        vegalite_app_path("schemas", "vega-lite-schema.json")
     )
 end
 
