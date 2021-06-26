@@ -27,7 +27,7 @@ export @vg_str, @vgplot, vgplot, @vgfrag, vgfrag
 export load, save
 export deletedata, deletedata!
 
-vegaliate_app_path(args...) = joinpath(artifact"vegalite_app", args...)
+vegalite_app_path(args...) = joinpath(artifact"vegalite_app", args...)
 const vegaliate_app_includes_canvas = Ref{Bool}()
 
 const vlschema = Ref{Dict{String, Any}}()

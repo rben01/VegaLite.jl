@@ -32,8 +32,8 @@ function convert_vl_to_x(v::VLSpec, second_script)
 end
 
 function convert_vl_to_svg(v::VLSpec)
-    vl2vg_script_path = vegaliate_app_path("vl2vg.js")
-    vg2svg_script_path = vegaliate_app_path("vg2svg.js")
+    vl2vg_script_path = vegalite_app_path("vl2vg.js")
+    vg2svg_script_path = vegalite_app_path("vg2svg.js")
     p = open(pipeline(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegaliate_app_path()), Cmd(`$(nodejs_cmd()) $vg2svg_script_path`, dir=vegaliate_app_path())), "r+")
     writer = @async begin
         our_json_print(p, v)
