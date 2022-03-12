@@ -18,35 +18,32 @@ function _convert_vl_with_cmds(v::VLSpec, cmds...)
 end
 
 function convert_vl_to_vg(v::VLSpec)
-    vl2vg_script_path = joinpath(vegaliate_app_path, "vl2vg.js")
+    vl2vg_script_path = vegalite_app_path("vl2vg.js")
     return _convert_vl_with_cmds(
         v,
-        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegaliate_app_path),
+        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path())
     )
 end
 
 function convert_vl_to_x(v::VLSpec, second_script)
-    vl2vg_script_path = joinpath(vegaliate_app_path, "vl2vg.js")
-    full_second_script_path =
-        joinpath(vegaliate_app_path, "node_modules", "vega-cli", "bin", second_script)
+    vl2vg_script_path = vegalite_app_path("vl2vg.js")
+    full_second_script_path = vegalite_app_path("node_modules", "vega-cli", "bin", second_script)
 
-    njscmd = nodejs_cmd()
     return _convert_vl_with_cmds(
         v,
-        Cmd(`$njscmd $vl2vg_script_path`, dir=vegaliate_app_path),
-        Cmd(`$njscmd $full_second_script_path -l error`, dir=vegaliate_app_path),
+        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()),
+        Cmd(`$(nodejs_cmd()) $full_second_script_path -l error`, dir=vegalite_app_path()),
     )
 end
 
 function convert_vl_to_svg(v::VLSpec)
-    vl2vg_script_path = joinpath(vegaliate_app_path, "vl2vg.js")
-    vg2svg_script_path = joinpath(vegaliate_app_path, "vg2svg.js")
-
-    njscmd = nodejs_cmd()
+    vl2vg_script_path = vegalite_app_path("vl2vg.js")
+    vg2svg_script_path = vegalite_app_path("vg2svg.js")
+    
     return _convert_vl_with_cmds(
         v,
-        Cmd(`$njscmd $vl2vg_script_path`, dir=vegaliate_app_path),
-        Cmd(`$njscmd $vg2svg_script_path`, dir=vegaliate_app_path),
+        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()),
+        Cmd(`$(nodejs_cmd()) $vg2svg_script_path`, dir=vegalite_app_path()),
     )
 end
 
