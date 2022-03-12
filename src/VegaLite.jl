@@ -27,17 +27,12 @@ export @vg_str, @vgplot, vgplot, @vgfrag, vgfrag
 export load, save
 export deletedata, deletedata!
 
-vegalite_app_path(args...) = joinpath(artifact"vegalite_app", args...)
-const vegaliate_app_includes_canvas = Ref{Bool}()
+const vegaliate_app_path = artifact"vegalite_app"
+const vegaliate_app_includes_canvas = ispath(joinpath(vegaliate_app_path, "node_modules", "canvas"))
 
-const vlschema = Ref{Dict{String, Any}}()
-
-function __init__()
-    vegaliate_app_includes_canvas[] = ispath(vegalite_app_path("node_modules", "canvas"))
-    vlschema[] = JSON.parsefile(
-        vegalite_app_path("schemas", "vega-lite-schema.json")
-    )
-end
+const vlschema = JSON.parsefile(
+    joinpath(vegaliate_app_path, "schemas", "vega-lite-schema.json")
+)
 
 include("vlspec.jl")
 
