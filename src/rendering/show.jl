@@ -1,51 +1,51 @@
-function convert_vl_to_vg(v::VLSpec)
-    vl2vg_script_path = vegalite_app_path("vl2vg.js")
-    p = open(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()), "r+")
-    writer = @async begin
-        our_json_print(p, v)
-        close(p.in)
-    end
+function _convert_vl_with_cmds(v::VLSpec, cmds...)
+    in_buf = IOBuffer()
+    our_json_print(in_buf, v)
+    seekstart(in_buf)
+
+    p = open(pipeline(in_buf, cmds...))
     reader = @async read(p, String)
     wait(p)
-    res = fetch(reader)
-    if p.exitcode != 0
+
+    if any(proc -> proc.exitcode != 0, p.processes)
+        # Is "Invalid spec" the only possible cause of failure?
         throw(ArgumentError("Invalid spec"))
     end
+
+    res = fetch(reader)
+
     return res
+end
+
+function convert_vl_to_vg(v::VLSpec)
+    vl2vg_script_path = vegalite_app_path("vl2vg.js")
+    return _convert_vl_with_cmds(
+        v,
+        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()),
+    )
 end
 
 function convert_vl_to_x(v::VLSpec, second_script)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     full_second_script_path = vegalite_app_path("node_modules", "vega-cli", "bin", second_script)
-    p = open(pipeline(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(nodejs_cmd()) $full_second_script_path -l error`, dir=vegalite_app_path())), "r+")
-    writer = @async begin
-        our_json_print(p, v)
-        close(p.in)
-    end
-    reader = @async read(p, String)
-    wait(p)
-    res = fetch(reader)
-    if p.processes[1].exitcode != 0 || p.processes[2].exitcode != 0
-        throw(ArgumentError("Invalid spec"))
-    end
-    return res
+    
+    return _convert_vl_with_cmds(
+        v,
+        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()),
+        Cmd(`$(nodejs_cmd()) $full_second_script_path -l error`, dir=vegalite_app_path()),
+    )
+
 end
 
 function convert_vl_to_svg(v::VLSpec)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     vg2svg_script_path = vegalite_app_path("vg2svg.js")
-    p = open(pipeline(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(nodejs_cmd()) $vg2svg_script_path`, dir=vegalite_app_path())), "r+")
-    writer = @async begin
-        our_json_print(p, v)
-        close(p.in)
-    end
-    reader = @async read(p, String)
-    wait(p)
-    res = fetch(reader)
-    if p.processes[1].exitcode != 0 || p.processes[2].exitcode != 0
-        throw(ArgumentError("Invalid spec"))
-    end
-    return res
+
+    return _convert_vl_with_cmds(
+        v,
+        Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()),
+        Cmd(`$(nodejs_cmd()) $vg2svg_script_path`, dir=vegalite_app_path()),
+    )
 end
 
 Base.Multimedia.istextmime(::MIME{Symbol("application/vnd.vegalite.v4+json")}) = true
