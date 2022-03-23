@@ -7,7 +7,7 @@ function _convert_vl_with_cmds(v::VLSpec, cmds...)
     reader = @async read(p, String)
     wait(p)
 
-    if any(proc -> proc.exitcode != 0, p.processes)
+    if (hasproperty(p, :exitcode) && p.exitcode != 0) || any(proc -> proc.exitcode != 0, p.processes)
         # Is "Invalid spec" the only possible cause of failure?
         throw(ArgumentError("Invalid spec"))
     end
