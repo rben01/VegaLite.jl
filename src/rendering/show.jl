@@ -48,14 +48,13 @@ function convert_vl_to_svg(v::VLSpec)
     )
 end
 
-Base.Multimedia.istextmime(::MIME{Symbol("application/vnd.vegalite.v4+json")}) = true
+Base.Multimedia.istextmime(::Union{MIME{Symbol("application/vnd.vegalite.v4+json"),Symbol("application/vnd.vegalite.v5+json")}}) = true
 
-function Base.show(io::IO, m::MIME"application/vnd.vegalite.v4+json", v::VLSpec)
+function Base.show(io::IO, ::Union{MIME{Symbol("application/vnd.vegalite.v4+json"),Symbol("application/vnd.vegalite.v5+json")}}, v::VLSpec)
     our_json_print(io, v)
 end
 
 function Base.show(io::IO, m::MIME"application/vnd.vega.v5+json", v::VLSpec)
-
     print(io, convert_vl_to_vg(v))
 end
 
