@@ -28,7 +28,7 @@ end
 function convert_vl_to_x(v::VLSpec, second_script)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     full_second_script_path = vegalite_app_path("node_modules", "vega-cli", "bin", second_script)
-    
+
     return _convert_vl_with_cmds(
         v,
         Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()),
@@ -48,21 +48,21 @@ function convert_vl_to_svg(v::VLSpec)
     )
 end
 
-Base.Multimedia.istextmime(::Union{MIME{Symbol("application/vnd.vegalite.v4+json")},MIME{Symbol("application/vnd.vegalite.v5+json")}}) = true
+Base.Multimedia.istextmime(::Union{MIME"application/vnd.vegalite.v4+json",MIME"application/vnd.vegalite.v5+json"}) = true
 
-function Base.show(io::IO, ::Union{MIME{Symbol("application/vnd.vegalite.v4+json")},MIME{Symbol("application/vnd.vegalite.v5+json")}}, v::VLSpec)
+function Base.show(io::IO, ::Union{MIME"application/vnd.vegalite.v4+json",MIME"application/vnd.vegalite.v5+json"}, v::VLSpec)
     our_json_print(io, v)
 end
 
-function Base.show(io::IO, m::MIME"application/vnd.vega.v5+json", v::VLSpec)
+function Base.show(io::IO, ::MIME"application/vnd.vega.v5+json", v::VLSpec)
     print(io, convert_vl_to_vg(v))
 end
 
-function Base.show(io::IO, m::MIME"image/svg+xml", v::VLSpec)
+function Base.show(io::IO, ::MIME"image/svg+xml", v::VLSpec)
     print(io, convert_vl_to_svg(v))
 end
 
-function Base.show(io::IO, m::MIME"application/pdf", v::VLSpec)
+function Base.show(io::IO, ::MIME"application/pdf", v::VLSpec)
     if vegaliate_app_includes_canvas[]
         print(io, convert_vl_to_x(v, "vg2pdf"))
     else
@@ -97,7 +97,7 @@ end
 #     end
 # end
 
-function Base.show(io::IO, m::MIME"image/png", v::VLSpec)
+function Base.show(io::IO, ::MIME"image/png", v::VLSpec)
     if vegaliate_app_includes_canvas[]
         print(io, convert_vl_to_x(v, "vg2png"))
     else
@@ -114,15 +114,15 @@ function Base.show(io::IO, m::MIME"image/png", v::VLSpec)
     end
 end
 
-function Base.show(io::IO, m::MIME"application/vnd.julia.fileio.htmlfile", v::VLSpec)
+function Base.show(io::IO, ::MIME"application/vnd.julia.fileio.htmlfile", v::VLSpec)
     writehtml_full(io, v)
 end
 
-function Base.show(io::IO, m::MIME"application/prs.juno.plotpane+html", v::VLSpec)
+function Base.show(io::IO, ::MIME"application/prs.juno.plotpane+html", v::VLSpec)
     writehtml_full(io, v)
 end
 
-Base.showable(m::MIME"text/html", v::VLSpec) = isdefined(Main, :PlutoRunner)
-function Base.show(io::IO, m::MIME"text/html", v::VLSpec)
+Base.showable(::MIME"text/html", ::VLSpec) = isdefined(Main, :PlutoRunner)
+function Base.show(io::IO, ::MIME"text/html", v::VLSpec)
     writehtml_partial_script(io, v)
 end
