@@ -1,6 +1,6 @@
 function convert_vl_to_vg(v::VLSpec)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
-    p = open(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()), "r+")
+    p = open(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), "r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -17,7 +17,7 @@ end
 function convert_vl_to_x(v::VLSpec, second_script)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     full_second_script_path = vegalite_app_path("node_modules", "vega-cli", "bin", second_script)
-    p = open(pipeline(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(nodejs_cmd()) $full_second_script_path -l error`, dir=vegalite_app_path())), "r+")
+    p = open(pipeline(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_16_jll.node()) $full_second_script_path -l error`, dir=vegalite_app_path())), "r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -34,7 +34,7 @@ end
 function convert_vl_to_svg(v::VLSpec)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     vg2svg_script_path = vegalite_app_path("vg2svg.js")
-    p = open(pipeline(Cmd(`$(nodejs_cmd()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(nodejs_cmd()) $vg2svg_script_path`, dir=vegalite_app_path())), "r+")
+    p = open(pipeline(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_16_jll.node()) $vg2svg_script_path`, dir=vegalite_app_path())), "r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -48,9 +48,9 @@ function convert_vl_to_svg(v::VLSpec)
     return res
 end
 
-Base.Multimedia.istextmime(::MIME{Symbol("application/vnd.vegalite.v4+json")}) = true
+Base.Multimedia.istextmime(::MIME{Symbol("application/vnd.vegalite.v5+json")}) = true
 
-function Base.show(io::IO, m::MIME"application/vnd.vegalite.v4+json", v::VLSpec)
+function Base.show(io::IO, m::MIME"application/vnd.vegalite.v5+json", v::VLSpec)
     our_json_print(io, v)
 end
 
