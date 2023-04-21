@@ -1,40 +1,7 @@
-function convert_vl_to_vg(v::VLSpec)
-    vl2vg_script_path = vegalite_app_path("vl2vg.js")
-    p = open(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), "r+")
-    writer = @async begin
-        our_json_print(p, v)
-        close(p.in)
-    end
-    reader = @async read(p, String)
-    wait(p)
-    res = fetch(reader)
-    if p.exitcode != 0
-        throw(ArgumentError("Invalid spec"))
-    end
-    return res
-end
+function convert_vl_to_x(v::VLSpec, fileformat)
+    script_path = vegalite_app_path("node_modules", "vega-lite", "bin", "vl2$fileformat")
 
-function convert_vl_to_x(v::VLSpec, second_script)
-    vl2vg_script_path = vegalite_app_path("vl2vg.js")
-    full_second_script_path = vegalite_app_path("node_modules", "vega-cli", "bin", second_script)
-    p = open(pipeline(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_16_jll.node()) $full_second_script_path -l error`, dir=vegalite_app_path())), "r+")
-    writer = @async begin
-        our_json_print(p, v)
-        close(p.in)
-    end
-    reader = @async read(p, String)
-    wait(p)
-    res = fetch(reader)
-    if p.processes[1].exitcode != 0 || p.processes[2].exitcode != 0
-        throw(ArgumentError("Invalid spec"))
-    end
-    return res
-end
-
-function convert_vl_to_svg(v::VLSpec)
-    vl2vg_script_path = vegalite_app_path("vl2vg.js")
-    vg2svg_script_path = vegalite_app_path("vg2svg.js")
-    p = open(pipeline(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_16_jll.node()) $vg2svg_script_path`, dir=vegalite_app_path())), "r+")
+    p = open(Cmd(`$(NodeJS_16_jll.node()) $script_path`, dir=vegalite_app_path()),"r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -55,17 +22,16 @@ function Base.show(io::IO, m::MIME"application/vnd.vegalite.v5+json", v::VLSpec)
 end
 
 function Base.show(io::IO, m::MIME"application/vnd.vega.v5+json", v::VLSpec)
-
-    print(io, convert_vl_to_vg(v))
+    print(io, convert_vl_to_x(v, "vg"))
 end
 
 function Base.show(io::IO, m::MIME"image/svg+xml", v::VLSpec)
-    print(io, convert_vl_to_svg(v))
+    print(io, convert_vl_to_x(v, "svg"))
 end
 
 function Base.show(io::IO, m::MIME"application/pdf", v::VLSpec)
     if vegaliate_app_includes_canvas[]
-        print(io, convert_vl_to_x(v, "vg2pdf"))
+        print(io, convert_vl_to_x(v, "pdf"))
     else
         error("Not yet implemented.")
         # svgstring = convert_vl_to_svg(v)
@@ -100,7 +66,7 @@ end
 
 function Base.show(io::IO, m::MIME"image/png", v::VLSpec)
     if vegaliate_app_includes_canvas[]
-        print(io, convert_vl_to_x(v, "vg2png"))
+        print(io, convert_vl_to_x(v, "png"))
     else
         error("Not yet implemented.")
         # svgstring = convert_vl_to_svg(v)
