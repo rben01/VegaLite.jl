@@ -1,6 +1,6 @@
 function convert_vl_to_vg(v::VLSpec)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
-    p = open(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), "r+")
+    p = open(Cmd(`$(NodeJS_18_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), "r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -17,7 +17,7 @@ end
 function convert_vl_to_x(v::VLSpec, second_script)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     full_second_script_path = vegalite_app_path("node_modules", "vega-cli", "bin", second_script)
-    p = open(pipeline(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_16_jll.node()) $full_second_script_path -l error`, dir=vegalite_app_path())), "r+")
+    p = open(pipeline(Cmd(`$(NodeJS_18_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_18_jll.node()) $full_second_script_path -l error`, dir=vegalite_app_path())), "r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -34,7 +34,7 @@ end
 function convert_vl_to_svg(v::VLSpec)
     vl2vg_script_path = vegalite_app_path("vl2vg.js")
     vg2svg_script_path = vegalite_app_path("vg2svg.js")
-    p = open(pipeline(Cmd(`$(NodeJS_16_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_16_jll.node()) $vg2svg_script_path`, dir=vegalite_app_path())), "r+")
+    p = open(pipeline(Cmd(`$(NodeJS_18_jll.node()) $vl2vg_script_path`, dir=vegalite_app_path()), Cmd(`$(NodeJS_18_jll.node()) $vg2svg_script_path`, dir=vegalite_app_path())), "r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
