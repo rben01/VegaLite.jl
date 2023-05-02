@@ -1,7 +1,7 @@
-function convert_vl_to_x(v::VLSpec, fileformat)
+function convert_vl_to_x(v::VLSpec, fileformat; cmd_args="")
     script_path = vegalite_app_path("node_modules", "vega-lite", "bin", "vl2$fileformat")
 
-    p = open(Cmd(`$(NodeJS_18_jll.node()) $script_path`, dir=vegalite_app_path()),"r+")
+    p = open(Cmd(`$(NodeJS_18_jll.node()) $script_path $cmd_args`, dir=vegalite_app_path()),"r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
@@ -66,7 +66,11 @@ end
 
 function Base.show(io::IO, m::MIME"image/png", v::VLSpec)
     if vegaliate_app_includes_canvas[]
-        print(io, convert_vl_to_x(v, "png"))
+        if haskey(io, :ppi)
+            print(io, convert_vl_to_x(v, "png", cmd_args="--ppi=$(io[:ppi])"))
+        else            
+            print(io, convert_vl_to_x(v, "png"))
+        end
     else
         error("Not yet implemented.")
         # svgstring = convert_vl_to_svg(v)
