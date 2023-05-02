@@ -1,7 +1,7 @@
 function convert_vl_to_x(v::VLSpec, fileformat)
     script_path = vegalite_app_path("node_modules", "vega-lite", "bin", "vl2$fileformat")
 
-    p = open(Cmd(`$(NodeJS_16_jll.node()) $script_path`, dir=vegalite_app_path()),"r+")
+    p = open(Cmd(`$(NodeJS_18_jll.node()) $script_path`, dir=vegalite_app_path()),"r+")
     writer = @async begin
         our_json_print(p, v)
         close(p.in)
