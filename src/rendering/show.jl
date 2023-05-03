@@ -1,6 +1,19 @@
 function convert_vl_to_x(v::VLSpec, fileformat; cmd_args="")
     script_path = vegalite_app_path("node_modules", "vega-lite", "bin", "vl2$fileformat")
 
+    data = get(v.params, "data", nothing)
+    if data !== nothing
+        values = pop!(data, "values", nothing)
+        if values !== nothing
+            (path, io) = mktemp(; cleanup=false)
+            println(path)
+            JSON.print(io, values)
+            close(io)
+            data["url"] = "file://$path"
+            data["format"] = OrderedDict("type" => "json")
+        end
+    end
+
     p = open(Cmd(`$(NodeJS_18_jll.node()) $script_path $cmd_args`, dir=vegalite_app_path()),"r+")
     writer = @async begin
         our_json_print(p, v)
@@ -68,7 +81,7 @@ function Base.show(io::IO, m::MIME"image/png", v::VLSpec)
     if vegaliate_app_includes_canvas[]
         if haskey(io, :ppi)
             print(io, convert_vl_to_x(v, "png", cmd_args="--ppi=$(io[:ppi])"))
-        else            
+        else
             print(io, convert_vl_to_x(v, "png"))
         end
     else
